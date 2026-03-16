@@ -95,7 +95,7 @@ export default function ChatArea({ className }: { className?: string }) {
       type: 'text',
     })
     simulateAIResponse(
-      'Você possui a requisição médica para esses exames? Pode enviar uma foto ou o arquivo (PDF).',
+      'Olá! Você possui a requisição médica para esses exames? Pode enviar uma foto ou o arquivo (PDF).\n\nAproveito para informar que nosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ (Programa Nacional de Controle de Qualidade), garantindo rigorosos padrões internacionais e máxima confiabilidade nos seus resultados.\n\nE para sua maior comodidade, oferecemos a Coleta Domiciliar. Que tal realizar seus exames com todo o conforto e conveniência sem sair de casa?',
     )
   }
 
@@ -109,7 +109,7 @@ export default function ChatArea({ className }: { className?: string }) {
       transcription: 'Oi, eu queria saber se vocês fazem exame de sangue, tipo hemograma e TSH?',
     })
     simulateAIResponse(
-      'Olá! Sim, nós realizamos esses exames. Você possui a requisição médica? Pode me enviar a foto ou arquivo por aqui.',
+      'Olá! Sim, nós realizamos esses exames. Nosso laboratório é "Padrão Ouro" pelo PNCQ, o que garante máxima confiabilidade e adesão a padrões internacionais de qualidade.\n\nPara o Hemograma e TSH, a instrução de preparo pré-analítico é de jejum de 8 a 12 horas. Você possui a requisição médica? Pode me enviar a foto ou arquivo por aqui.\n\nLembrando que oferecemos o serviço de Coleta Domiciliar, caso prefira o conforto e a conveniência de ser atendido na sua casa!',
       2500,
     )
   }
@@ -125,7 +125,7 @@ export default function ChatArea({ className }: { className?: string }) {
         'Conteúdo extraído via OCR:\n1. Hemograma Completo\n2. TSH\n3. Vitamina D\nDr. Augusto CRM 12345',
     })
     simulateAIResponse(
-      'Identifiquei os seguintes exames na sua requisição:\n- Hemograma Completo\n- TSH\n- Vitamina D\n\nEstão corretos?',
+      'Identifiquei os seguintes exames na sua requisição e seus preparos pré-analíticos:\n- Hemograma Completo (Jejum de 8 a 12 horas)\n- TSH (Jejum de 4 horas)\n- Vitamina D (Não exige jejum)\n\nEstão corretos?\n\nVale lembrar que somos classificados como "Padrão Ouro" pelo PNCQ, assegurando rigorosos padrões internacionais de qualidade para os seus resultados. Gostaria de agendar na clínica ou prefere aproveitar o conforto e a conveniência da nossa Coleta Domiciliar?',
       3000,
     )
   }

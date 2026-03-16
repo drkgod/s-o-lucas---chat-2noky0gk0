@@ -23,7 +23,7 @@ export const mockChats: Chat[] = [
       },
       {
         id: 'm2',
-        text: 'Olá! O valor do Ecocardiograma é R$ 250,00. Gostaria de agendar?',
+        text: 'Olá! O valor do Ecocardiograma é R$ 250,00. Gostaria de agendar? Lembrando que nossa clínica possui excelência em atendimento.',
         sender: 'ai',
         timestamp: '10:30',
         type: 'text',
@@ -66,7 +66,7 @@ export const mockChats: Chat[] = [
       },
       {
         id: 'm2',
-        text: 'Para o hemograma completo, recomendamos jejum de 8 a 12 horas. Você pode beber água moderadamente.',
+        text: 'Para o hemograma completo, a instrução de preparo pré-analítico é jejum de 8 a 12 horas. Você pode beber água moderadamente.\n\nLembro que nosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ, o que garante rigorosos padrões internacionais de qualidade e máxima confiabilidade nos resultados.\n\nGostaria de agendar na clínica ou prefere a nossa opção de Coleta Domiciliar, para realizar seu exame com todo o conforto e conveniência em casa?',
         sender: 'ai',
         timestamp: 'Ontem 09:15',
         type: 'text',
@@ -87,7 +87,7 @@ export const mockChats: Chat[] = [
       },
       {
         id: 'm5',
-        text: 'João, nossos horários matutinos costumam preencher rápido. Quer garantir o seu para esta semana? (Mensagem de acompanhamento 3/12)',
+        text: 'João, nossos horários matutinos costumam preencher rápido. Quer garantir o seu para esta semana? A Coleta Domiciliar também está disponível! (Mensagem de acompanhamento 3/12)',
         sender: 'ai',
         timestamp: 'Hoje 14:00',
         type: 'text',
@@ -117,7 +117,7 @@ export const mockChats: Chat[] = [
       },
       {
         id: 'm2',
-        text: 'Bom dia, Ana! Você possui a requisição médica para esses exames?',
+        text: 'Bom dia, Ana! Você possui a requisição médica para esses exames? Pode nos enviar a foto.',
         sender: 'ai',
         timestamp: '08:01',
         type: 'text',
@@ -141,7 +141,7 @@ export const mockChats: Chat[] = [
       },
       {
         id: 'm5',
-        text: 'Identifiquei os seguintes exames na sua requisição:\n- Hemograma Completo\n- Glicemia em Jejum\n- Colesterol Total e Frações\n\nEstão corretos?',
+        text: 'Identifiquei os seguintes exames na sua requisição e seus respectivos preparos:\n- Hemograma Completo (Jejum de 8 a 12 horas)\n- Glicemia em Jejum (Jejum absoluto de 8 horas)\n- Colesterol Total e Frações (Jejum de 12 horas)\n\nEstão corretos?\n\nNosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ, o que garante rigorosos padrões internacionais de qualidade e máxima confiabilidade nos seus resultados.\n\nPara sua comodidade, oferecemos o serviço de Coleta Domiciliar. Deseja agendar na clínica ou no conforto da sua casa?',
         sender: 'ai',
         timestamp: '08:06',
         type: 'text',
