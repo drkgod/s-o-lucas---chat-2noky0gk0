@@ -1,13 +1,43 @@
-/* Layout Component - A component that wraps the main content of the app
-   - Use this file to add a header, footer, or other elements that should be present on every page
-   - This component is used in the App.tsx file to wrap the main content of the app */
-
+import { useEffect } from 'react'
 import { Outlet } from 'react-router-dom'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import AppSidebar from './AppSidebar'
+import Header from './Header'
+import StatusBar from './StatusBar'
+import { useToast } from '@/hooks/use-toast'
+import useAppStore from '@/stores/useAppStore'
 
 export default function Layout() {
+  const { toast } = useToast()
+  const { setHasAlert } = useAppStore()
+
+  useEffect(() => {
+    // Simulate incoming critical alert for demo purposes
+    const timer = setTimeout(() => {
+      setHasAlert(true)
+      toast({
+        title: 'Intervenção Humana Solicitada',
+        description: 'Paciente Maria Silva precisa de assistência na Linha Principal.',
+        variant: 'destructive',
+      })
+    }, 4000)
+    return () => clearTimeout(timer)
+  }, [setHasAlert, toast])
+
   return (
-    <main className="flex flex-col min-h-screen">
-      <Outlet />
-    </main>
+    <SidebarProvider>
+      <div className="flex h-screen w-full overflow-hidden bg-background">
+        <AppSidebar />
+        <div className="flex flex-1 flex-col overflow-hidden">
+          <Header />
+          <main className="flex-1 overflow-auto animate-fade-in p-4 md:p-6 lg:p-8">
+            <div className="mx-auto h-full max-w-7xl">
+              <Outlet />
+            </div>
+          </main>
+          <StatusBar />
+        </div>
+      </div>
+    </SidebarProvider>
   )
 }

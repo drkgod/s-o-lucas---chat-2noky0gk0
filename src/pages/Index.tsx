@@ -1,12 +1,32 @@
-/* Home Page - Replace this page layout, components, content, behavior with what you want and translate to the language of the user */
-const Index = () => {
+import KpiCards from './dashboard/KpiCards'
+import ActivityChart from './dashboard/ActivityChart'
+import ServiceChart from './dashboard/ServiceChart'
+import AlertsList from './dashboard/AlertsList'
+
+export default function Index() {
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">
-        This is a example page ready to be rewritten with your own content
-      </h1>
+    <div className="flex flex-col gap-6">
+      <div>
+        <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-slate-100">
+          Visão Geral
+        </h1>
+        <p className="text-muted-foreground">Bem-vindo ao painel omnichannel da Clínica.</p>
+      </div>
+
+      <KpiCards />
+
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="lg:col-span-2">
+          <ActivityChart />
+        </div>
+        <div className="lg:col-span-1">
+          <ServiceChart />
+        </div>
+      </div>
+
+      <div className="grid gap-4 grid-cols-1">
+        <AlertsList />
+      </div>
     </div>
   )
 }
-
-export default Index
