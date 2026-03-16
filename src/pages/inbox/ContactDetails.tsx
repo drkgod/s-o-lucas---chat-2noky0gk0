@@ -8,6 +8,7 @@ import {
   Star,
   AlertCircle,
   ClipboardCheck,
+  CheckCircle,
 } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
@@ -86,6 +87,21 @@ export default function ContactDetails({ className }: { className?: string }) {
                       {chat.patientData.coverageType}{' '}
                       {chat.patientData.coverageName ? `- ${chat.patientData.coverageName}` : ''}
                     </span>
+                  </div>
+
+                  <div className="flex flex-col col-span-full mt-2 space-y-2">
+                    {chat.patientData.idDocumentProvided && (
+                      <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-1.5 rounded border border-emerald-500/20">
+                        <CheckCircle className="h-3.5 w-3.5 shrink-0" />
+                        <span>Documento de Identidade (RG/CNH) recebido</span>
+                      </div>
+                    )}
+                    {chat.patientData.insuranceCardProvided && (
+                      <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-1.5 rounded border border-emerald-500/20">
+                        <CheckCircle className="h-3.5 w-3.5 shrink-0" />
+                        <span>Carteirinha do Convênio recebida (Autorização Prévia)</span>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

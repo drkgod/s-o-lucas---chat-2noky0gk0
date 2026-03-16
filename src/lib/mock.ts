@@ -195,4 +195,20 @@ export const mockServices: ServiceItem[] = [
     price: 'R$ 300,00',
     instructions: 'Trazer exames anteriores.',
   },
+  {
+    id: 's6',
+    category: 'exam',
+    name: 'Sumário de Urina',
+    price: 'R$ 25,00',
+    instructions:
+      'Utilizar coletor estéril. Coletar segundo jato de urina após higienizar a região íntima. Secar bem antes de coletar.',
+  },
+  {
+    id: 's7',
+    category: 'exam',
+    name: 'Cultura de Urina',
+    price: 'R$ 40,00',
+    instructions:
+      'Utilizar coletor estéril. Coletar segundo jato de urina após higienizar a região íntima. Secar bem antes de coletar.',
+  },
 ]

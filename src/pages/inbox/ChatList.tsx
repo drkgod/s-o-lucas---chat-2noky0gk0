@@ -62,7 +62,9 @@ export default function ChatList({ className }: { className?: string }) {
                       ? '🎵 Mensagem de áudio'
                       : lastMsg?.type === 'document'
                         ? '📄 Documento anexado'
-                        : lastMsg?.text}
+                        : lastMsg?.type === 'image'
+                          ? '🖼️ Imagem anexada'
+                          : lastMsg?.text}
                   </p>
                   <div className="flex items-center justify-between mt-2">
                     <div className="flex items-center gap-1.5 overflow-hidden">

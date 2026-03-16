@@ -11,6 +11,7 @@ import {
   Paperclip,
   ClipboardCheck,
   Clock,
+  Droplet,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -141,7 +142,7 @@ export default function ChatArea({ className }: { className?: string }) {
       type: 'text',
     })
     simulateAIResponse(
-      'Perfeito! Para agilizarmos o seu atendimento na clínica e garantirmos a nossa agilidade "Padrão Ouro", vou realizar o seu pré-cadastro agora. Assim, você não pega fila na recepção!\n\nPor favor, me informe:\n1. Nome Completo\n2. Data de Nascimento\n3. CPF\n4. Endereço Completo\n5. Forma de Atendimento (Plano de Saúde, Particular ou Convênio Parceiro?)',
+      'Perfeito! Para agilizarmos o seu atendimento na clínica e garantirmos a nossa agilidade "Padrão Ouro", vou realizar o seu pré-cadastro agora. Assim, você não pega fila na recepção!\n\nPor favor, me informe:\n1. Nome Completo\n2. Data de Nascimento\n3. CPF\n4. Endereço Completo\n5. Forma de Atendimento (Plano de Saúde, Particular ou Convênio Parceiro?)\n\nTambém peço que envie uma foto ou PDF do seu documento de identidade com foto (RG ou CNH). Fornecer esses documentos nos permite agilizar o seu atendimento na chegada.',
       2500,
     )
 
@@ -155,51 +156,89 @@ export default function ChatArea({ className }: { className?: string }) {
         transcription:
           'Oi, meu nome é Maria Oliveira, nasci em 12 de maio de 1990, CPF 098.765.432-10. Eu moro na Avenida Paulista, 1000. Plano de saúde.',
       })
-      simulateAIResponse(
-        'Obrigado, Maria! Como você escolheu "Plano de Saúde", poderia me informar qual é o nome do seu plano (ex: Unimed, Bradesco, Amil)?',
-        2500,
-      )
+      setTimeout(() => {
+        addMessage({
+          id: (Date.now() + 2).toString(),
+          text: '',
+          sender: 'user',
+          timestamp: 'Agora',
+          type: 'image',
+          fileUrl: 'https://img.usecurling.com/p/300/200?q=id%20card',
+        })
+        simulateAIResponse(
+          'Obrigado, Maria! Como você escolheu "Plano de Saúde", poderia me informar qual é o nome do seu plano (ex: Unimed, Bradesco, Amil)?\n\nPor favor, envie também uma foto da sua carteirinha física ou um print da carteirinha digital. Fornecer esses documentos nos permite solicitar a autorização prévia junto ao convênio, agilizando muito o seu atendimento!',
+          2500,
+        )
+      }, 1500)
     }, 7000)
 
     setTimeout(() => {
       addMessage({
-        id: (Date.now() + 2).toString(),
+        id: (Date.now() + 3).toString(),
         text: 'É Amil.',
         sender: 'user',
         timestamp: 'Agora',
         type: 'text',
       })
-      simulateAIResponse('Tudo certo! Confirme os dados do seu pré-cadastro abaixo:', 2500, {
-        type: 'registration_card',
-        registrationData: {
-          name: 'Maria Oliveira',
-          dob: '12/05/1990',
-          cpf: '098.765.432-10',
-          address: 'Avenida Paulista, 1000',
-          coverageType: 'Plano de Saúde',
-          coverageName: 'Amil',
-        },
-      })
       setTimeout(() => {
-        setChats((prev) =>
-          prev.map((c) =>
-            c.id === chat.id
-              ? {
-                  ...c,
-                  patientData: {
-                    name: 'Maria Oliveira',
-                    dob: '12/05/1990',
-                    cpf: '098.765.432-10',
-                    address: 'Avenida Paulista, 1000',
-                    coverageType: 'Plano de Saúde',
-                    coverageName: 'Amil',
-                  },
-                }
-              : c,
-          ),
-        )
-      }, 3000)
-    }, 12000)
+        addMessage({
+          id: (Date.now() + 4).toString(),
+          text: '',
+          sender: 'user',
+          timestamp: 'Agora',
+          type: 'image',
+          fileUrl: 'https://img.usecurling.com/p/300/200?q=health%20insurance%20card',
+        })
+        simulateAIResponse('Tudo certo! Confirme os dados do seu pré-cadastro abaixo:', 2500, {
+          type: 'registration_card',
+          registrationData: {
+            name: 'Maria Oliveira',
+            dob: '12/05/1990',
+            cpf: '098.765.432-10',
+            address: 'Avenida Paulista, 1000',
+            coverageType: 'Plano de Saúde',
+            coverageName: 'Amil',
+            idDocumentProvided: true,
+            insuranceCardProvided: true,
+          },
+        })
+        setTimeout(() => {
+          setChats((prev) =>
+            prev.map((c) =>
+              c.id === chat.id
+                ? {
+                    ...c,
+                    patientData: {
+                      name: 'Maria Oliveira',
+                      dob: '12/05/1990',
+                      cpf: '098.765.432-10',
+                      address: 'Avenida Paulista, 1000',
+                      coverageType: 'Plano de Saúde',
+                      coverageName: 'Amil',
+                      idDocumentProvided: true,
+                      insuranceCardProvided: true,
+                    },
+                  }
+                : c,
+            ),
+          )
+        }, 3000)
+      }, 1500)
+    }, 16000)
+  }
+
+  const handleSimulateUrineTest = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Preciso fazer um Sumário de Urina e Cultura de Urina. Tem algum preparo?',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+    simulateAIResponse(
+      'Olá! Sim, para o Sumário de Urina e a Cultura de Urina, temos algumas instruções importantes para garantir a qualidade "Padrão Ouro" do PNCQ dos nossos resultados:\n\n- Utilizar coletor estéril.\n- Coletar segundo jato de urina após higienizar a região íntima.\n- Secar bem antes de coletar.\n\nInformamos que o laboratório disponibiliza o coletor estéril de forma gratuita! Você pode passar em qualquer uma de nossas unidades para retirar o seu antes da coleta.\n\nDeseja agendar a entrega do material?',
+      2500,
+    )
   }
 
   const handleSimulateRegistrationDropoff = () => {
@@ -266,6 +305,7 @@ export default function ChatArea({ className }: { className?: string }) {
             const isUser = m.sender === 'user'
             const isAudio = m.type === 'audio'
             const isDocument = m.type === 'document'
+            const isImage = m.type === 'image'
             const isRegistrationCard = m.type === 'registration_card'
 
             return (
@@ -350,7 +390,18 @@ export default function ChatArea({ className }: { className?: string }) {
                       )}
                     </div>
                   )}
-                  {!isAudio && !isDocument && <span className="whitespace-pre-wrap">{m.text}</span>}
+                  {isImage && m.fileUrl && (
+                    <div className="flex flex-col gap-2 min-w-[200px] mt-1 mb-1">
+                      <img
+                        src={m.fileUrl}
+                        alt="Anexo"
+                        className="rounded-lg object-cover max-h-[200px] border border-border/20 shadow-sm"
+                      />
+                    </div>
+                  )}
+                  {!isAudio && !isDocument && !isImage && (
+                    <span className="whitespace-pre-wrap">{m.text}</span>
+                  )}
 
                   {isRegistrationCard && m.registrationData && (
                     <div className="mt-3 flex flex-col gap-2 bg-background p-3 rounded-lg border border-border/50 shadow-sm text-sm w-full min-w-[260px]">
@@ -486,6 +537,13 @@ export default function ChatArea({ className }: { className?: string }) {
             onClick={handleSimulateRegistration}
           >
             <ClipboardCheck className="h-3 w-3 mr-1" /> Pré-cadastro
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
+            onClick={handleSimulateUrineTest}
+          >
+            <Droplet className="h-3 w-3 mr-1" /> Exame de Urina
           </Badge>
           <Badge
             variant="secondary"

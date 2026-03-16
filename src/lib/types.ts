@@ -9,6 +9,8 @@ export interface RegistrationData {
   address?: string
   coverageType?: string
   coverageName?: string
+  idDocumentProvided?: boolean
+  insuranceCardProvided?: boolean
 }
 
 export interface Message {
