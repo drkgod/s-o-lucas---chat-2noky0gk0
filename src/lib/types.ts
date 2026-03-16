@@ -1,6 +1,15 @@
 export type Platform = 'whatsapp' | 'instagram'
 
-export type MessageType = 'text' | 'audio' | 'document' | 'image'
+export type MessageType = 'text' | 'audio' | 'document' | 'image' | 'registration_card'
+
+export interface RegistrationData {
+  name?: string
+  dob?: string
+  cpf?: string
+  address?: string
+  coverageType?: string
+  coverageName?: string
+}
 
 export interface Message {
   id: string
@@ -10,6 +19,7 @@ export interface Message {
   type?: MessageType
   fileUrl?: string
   transcription?: string
+  registrationData?: RegistrationData
 }
 
 export interface Chat {
@@ -27,6 +37,7 @@ export interface Chat {
   lastActivity?: string
   surveyResult?: number
   lostReason?: 'price' | 'payment_method' | 'availability' | 'competitor' | 'other'
+  patientData?: RegistrationData
 }
 
 export interface ServiceItem {

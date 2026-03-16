@@ -57,6 +57,13 @@ export const mockChats: Chat[] = [
     followUpStep: 3,
     lastActivity: 'Ontem',
     surveyResult: 5,
+    patientData: {
+      name: 'João Pedro de Souza',
+      dob: '22/08/1992',
+      cpf: '111.222.333-44',
+      address: 'Rua Augusta, 500, São Paulo',
+      coverageType: 'Particular',
+    },
     messages: [
       {
         id: 'm1',

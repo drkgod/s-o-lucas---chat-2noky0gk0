@@ -1,4 +1,14 @@
-import { FileText, User, Calendar, MapPin, Clock, Activity, Star, AlertCircle } from 'lucide-react'
+import {
+  FileText,
+  User,
+  Calendar,
+  MapPin,
+  Clock,
+  Activity,
+  Star,
+  AlertCircle,
+  ClipboardCheck,
+} from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
@@ -34,6 +44,54 @@ export default function ContactDetails({ className }: { className?: string }) {
             <span>Última interação: {chat.lastActivity || 'Hoje'}</span>
           </div>
         </div>
+
+        {chat.patientData && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
+                <ClipboardCheck className="h-3 w-3 text-primary" /> Dados do Pré-cadastro
+              </h4>
+              <div className="bg-primary/5 rounded-lg p-3 text-sm border border-primary/20">
+                <div className="grid grid-cols-1 gap-2 text-xs">
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                      Nome Completo
+                    </span>
+                    <span className="font-medium">{chat.patientData.name}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                      Nascimento
+                    </span>
+                    <span className="font-medium">{chat.patientData.dob}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                      CPF
+                    </span>
+                    <span className="font-medium">{chat.patientData.cpf}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                      Endereço
+                    </span>
+                    <span className="font-medium">{chat.patientData.address}</span>
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                      Cobertura
+                    </span>
+                    <span className="font-medium">
+                      {chat.patientData.coverageType}{' '}
+                      {chat.patientData.coverageName ? `- ${chat.patientData.coverageName}` : ''}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {chat.surveyResult && (
           <>

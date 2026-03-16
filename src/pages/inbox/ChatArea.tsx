@@ -3,13 +3,14 @@ import {
   Send,
   Bot,
   User,
-  CornerUpLeft,
   MoreVertical,
   FileText,
   FileSearch,
   Headphones,
   Mic,
   Paperclip,
+  ClipboardCheck,
+  Clock,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -60,7 +61,7 @@ export default function ChatArea({ className }: { className?: string }) {
     )
   }
 
-  const simulateAIResponse = (text: string, delay = 2000) => {
+  const simulateAIResponse = (text: string, delay = 2000, extraProps: Partial<Message> = {}) => {
     setIsTyping(true)
     setTimeout(() => {
       addMessage({
@@ -69,6 +70,7 @@ export default function ChatArea({ className }: { className?: string }) {
         sender: 'ai',
         timestamp: 'Agora',
         type: 'text',
+        ...extraProps,
       })
       setIsTyping(false)
     }, delay)
@@ -95,7 +97,7 @@ export default function ChatArea({ className }: { className?: string }) {
       type: 'text',
     })
     simulateAIResponse(
-      'Olá! Você possui a requisição médica para esses exames? Pode enviar uma foto ou o arquivo (PDF).\n\nAproveito para informar que nosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ (Programa Nacional de Controle de Qualidade), garantindo rigorosos padrões internacionais e máxima confiabilidade nos seus resultados.\n\nE para sua maior comodidade, oferecemos a Coleta Domiciliar. Que tal realizar seus exames com todo o conforto e conveniência sem sair de casa?',
+      'Olá! Você possui a requisição médica para esses exames? Pode enviar uma foto ou o arquivo (PDF).\n\nAproveito para informar que nosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ, garantindo rigorosos padrões internacionais e máxima confiabilidade nos seus resultados.\n\nE para sua maior comodidade, oferecemos a Coleta Domiciliar. Que tal realizar seus exames com todo o conforto sem sair de casa?',
     )
   }
 
@@ -109,7 +111,7 @@ export default function ChatArea({ className }: { className?: string }) {
       transcription: 'Oi, eu queria saber se vocês fazem exame de sangue, tipo hemograma e TSH?',
     })
     simulateAIResponse(
-      'Olá! Sim, nós realizamos esses exames. Nosso laboratório é "Padrão Ouro" pelo PNCQ, o que garante máxima confiabilidade e adesão a padrões internacionais de qualidade.\n\nPara o Hemograma e TSH, a instrução de preparo pré-analítico é de jejum de 8 a 12 horas. Você possui a requisição médica? Pode me enviar a foto ou arquivo por aqui.\n\nLembrando que oferecemos o serviço de Coleta Domiciliar, caso prefira o conforto e a conveniência de ser atendido na sua casa!',
+      'Olá! Sim, nós realizamos esses exames. Nosso laboratório é "Padrão Ouro" pelo PNCQ, o que garante máxima confiabilidade.\n\nPara o Hemograma e TSH, a instrução de preparo é de jejum de 8 a 12 horas. Você possui a requisição médica? Pode me enviar a foto.\n\nLembrando que oferecemos o serviço de Coleta Domiciliar!',
       2500,
     )
   }
@@ -125,59 +127,100 @@ export default function ChatArea({ className }: { className?: string }) {
         'Conteúdo extraído via OCR:\n1. Hemograma Completo\n2. TSH\n3. Vitamina D\nDr. Augusto CRM 12345',
     })
     simulateAIResponse(
-      'Identifiquei os seguintes exames na sua requisição e seus preparos pré-analíticos:\n- Hemograma Completo (Jejum de 8 a 12 horas)\n- TSH (Jejum de 4 horas)\n- Vitamina D (Não exige jejum)\n\nEstão corretos?\n\nVale lembrar que somos classificados como "Padrão Ouro" pelo PNCQ, assegurando rigorosos padrões internacionais de qualidade para os seus resultados. Gostaria de agendar na clínica ou prefere aproveitar o conforto e a conveniência da nossa Coleta Domiciliar?',
+      'Identifiquei os seguintes exames na sua requisição e preparos:\n- Hemograma Completo (Jejum de 8 a 12h)\n- TSH (Jejum de 4h)\n- Vitamina D (Sem jejum)\n\nEstão corretos?\n\nVale lembrar que somos classificados como "Padrão Ouro" pelo PNCQ. Gostaria de agendar na clínica ou prefere nossa Coleta Domiciliar?',
       3000,
     )
   }
 
-  const handleSimulateRefusal = () => {
+  const handleSimulateRegistration = () => {
     addMessage({
       id: Date.now().toString(),
-      text: 'Achei o valor alto, não vou fazer agora.',
+      text: 'Quero agendar os exames.',
       sender: 'user',
       timestamp: 'Agora',
       type: 'text',
     })
     simulateAIResponse(
-      'Entendo perfeitamente! Gostaria de pedir uma última chance para fecharmos. Você chegou a cotar em outro laboratório? Se sim, poderia me enviar uma foto ou PDF do orçamento? Vou conversar com o supervisor para ajustar uma melhor forma de atender, mas não irei deixar de atender.',
+      'Perfeito! Para agilizarmos o seu atendimento na clínica e garantirmos a nossa agilidade "Padrão Ouro", vou realizar o seu pré-cadastro agora. Assim, você não pega fila na recepção!\n\nPor favor, me informe:\n1. Nome Completo\n2. Data de Nascimento\n3. CPF\n4. Endereço Completo\n5. Forma de Atendimento (Plano de Saúde, Particular ou Convênio Parceiro?)',
       2500,
     )
-  }
 
-  const handleSimulateCompetitor = () => {
-    addMessage({
-      id: Date.now().toString(),
-      text: '',
-      sender: 'user',
-      timestamp: 'Agora',
-      type: 'document',
-      transcription:
-        'Conteúdo extraído via OCR:\nOrçamento Laboratório Concorrente\nTotal: R$ 120,00',
-    })
-    simulateAIResponse(
-      'Analisando o orçamento enviado... Vejo que a diferença está no valor total e nas condições de pagamento.\n\nFalei com meu supervisor e conseguimos cobrir esse valor de R$ 120,00 e ainda parcelar em até 3x sem juros para você. O que acha de fecharmos agora?',
-      3500,
-    )
-  }
-
-  const handleSimulateSurvey = () => {
-    simulateAIResponse(
-      'Seu atendimento foi concluído! Como você avalia sua experiência conosco de 1 a 5?\n\n1 - Muito Ruim\n2 - Ruim\n3 - Regular\n4 - Bom\n5 - Excelente',
-      1000,
-    )
     setTimeout(() => {
       addMessage({
-        id: Date.now().toString(),
-        text: '5',
+        id: (Date.now() + 1).toString(),
+        text: '',
+        sender: 'user',
+        timestamp: 'Agora',
+        type: 'audio',
+        transcription:
+          'Oi, meu nome é Maria Oliveira, nasci em 12 de maio de 1990, CPF 098.765.432-10. Eu moro na Avenida Paulista, 1000. Plano de saúde.',
+      })
+      simulateAIResponse(
+        'Obrigado, Maria! Como você escolheu "Plano de Saúde", poderia me informar qual é o nome do seu plano (ex: Unimed, Bradesco, Amil)?',
+        2500,
+      )
+    }, 7000)
+
+    setTimeout(() => {
+      addMessage({
+        id: (Date.now() + 2).toString(),
+        text: 'É Amil.',
         sender: 'user',
         timestamp: 'Agora',
         type: 'text',
       })
+      simulateAIResponse('Tudo certo! Confirme os dados do seu pré-cadastro abaixo:', 2500, {
+        type: 'registration_card',
+        registrationData: {
+          name: 'Maria Oliveira',
+          dob: '12/05/1990',
+          cpf: '098.765.432-10',
+          address: 'Avenida Paulista, 1000',
+          coverageType: 'Plano de Saúde',
+          coverageName: 'Amil',
+        },
+      })
+      setTimeout(() => {
+        setChats((prev) =>
+          prev.map((c) =>
+            c.id === chat.id
+              ? {
+                  ...c,
+                  patientData: {
+                    name: 'Maria Oliveira',
+                    dob: '12/05/1990',
+                    cpf: '098.765.432-10',
+                    address: 'Avenida Paulista, 1000',
+                    coverageType: 'Plano de Saúde',
+                    coverageName: 'Amil',
+                  },
+                }
+              : c,
+          ),
+        )
+      }, 3000)
+    }, 12000)
+  }
+
+  const handleSimulateRegistrationDropoff = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Vamos fechar.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+    simulateAIResponse(
+      'Excelente! Para o nosso serviço "Padrão Ouro", me informe para o pré-cadastro:\n1. Nome 2. Data Nasc. 3. CPF 4. Endereço 5. Forma de Atendimento',
+      2000,
+    )
+    setTimeout(() => {
       simulateAIResponse(
-        'Agradecemos muito pela sua avaliação! Conte sempre com a Clínica Multicanal.',
-        1500,
+        'Olá! Percebi que você não concluiu o envio dos dados. Posso ajudar? O pré-cadastro agiliza muito o seu atendimento na clínica! (Acompanhamento 1/12)',
+        5000,
       )
-    }, 4000)
+      setChats((prev) => prev.map((c) => (c.id === chat.id ? { ...c, followUpStep: 1 } : c)))
+    }, 7000)
   }
 
   return (
@@ -223,6 +266,7 @@ export default function ChatArea({ className }: { className?: string }) {
             const isUser = m.sender === 'user'
             const isAudio = m.type === 'audio'
             const isDocument = m.type === 'document'
+            const isRegistrationCard = m.type === 'registration_card'
 
             return (
               <div
@@ -274,7 +318,7 @@ export default function ChatArea({ className }: { className?: string }) {
                           <FileSearch className="h-3.5 w-3.5 mt-0.5 opacity-70 shrink-0" />
                           <div className="flex flex-col">
                             <span className="font-semibold text-[9px] opacity-70 uppercase mb-0.5">
-                              Transcrição de Áudio (IA)
+                              Transcrição (IA)
                             </span>
                             <span className="italic">"{m.transcription}"</span>
                           </div>
@@ -298,7 +342,7 @@ export default function ChatArea({ className }: { className?: string }) {
                           <FileSearch className="h-3.5 w-3.5 mt-0.5 opacity-70 shrink-0" />
                           <div className="flex flex-col">
                             <span className="font-semibold text-[9px] opacity-70 uppercase mb-0.5">
-                              OCR / Leitura de Documento (IA)
+                              Leitura de Documento (IA)
                             </span>
                             <span className="whitespace-pre-line">{m.transcription}</span>
                           </div>
@@ -307,6 +351,69 @@ export default function ChatArea({ className }: { className?: string }) {
                     </div>
                   )}
                   {!isAudio && !isDocument && <span className="whitespace-pre-wrap">{m.text}</span>}
+
+                  {isRegistrationCard && m.registrationData && (
+                    <div className="mt-3 flex flex-col gap-2 bg-background p-3 rounded-lg border border-border/50 shadow-sm text-sm w-full min-w-[260px]">
+                      <div className="flex items-center gap-2 mb-1 border-b pb-2">
+                        <ClipboardCheck className="h-4 w-4 text-primary" />
+                        <span className="font-semibold text-primary text-sm">
+                          Pré-cadastro Preenchido
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-1.5 text-xs mt-1">
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                            Nome Completo
+                          </span>
+                          <span className="font-medium">{m.registrationData.name}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                            Data de Nascimento
+                          </span>
+                          <span className="font-medium">{m.registrationData.dob}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                            CPF
+                          </span>
+                          <span className="font-medium">{m.registrationData.cpf}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                            Endereço
+                          </span>
+                          <span className="font-medium">{m.registrationData.address}</span>
+                        </div>
+                        <div className="flex flex-col">
+                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                            Tipo de Cobertura
+                          </span>
+                          <span className="font-medium">
+                            {m.registrationData.coverageType}{' '}
+                            {m.registrationData.coverageName
+                              ? `- ${m.registrationData.coverageName}`
+                              : ''}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="mt-2 pt-2 border-t flex justify-end gap-2">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          className="h-7 text-xs px-2 pointer-events-none"
+                        >
+                          Editar Dados
+                        </Button>
+                        <Button
+                          size="sm"
+                          className="h-7 text-xs px-2 bg-primary text-primary-foreground pointer-events-none"
+                        >
+                          Confirmar
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </div>
                 <span className="text-[10px] text-muted-foreground mt-1 px-1">{m.timestamp}</span>
               </div>
@@ -373,30 +480,19 @@ export default function ChatArea({ className }: { className?: string }) {
           >
             <Mic className="h-3 w-3 mr-1" /> Áudio
           </Badge>
-
-          <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center ml-2 mr-1 shrink-0 border-l pl-4">
-            Recuperação/CSAT:
-          </span>
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-destructive/10 text-destructive border-destructive/20"
-            onClick={handleSimulateRefusal}
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
+            onClick={handleSimulateRegistration}
           >
-            <User className="h-3 w-3 mr-1" /> Recusar Preço
+            <ClipboardCheck className="h-3 w-3 mr-1" /> Pré-cadastro
           </Badge>
           <Badge
             variant="secondary"
             className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
-            onClick={handleSimulateCompetitor}
+            onClick={handleSimulateRegistrationDropoff}
           >
-            <Paperclip className="h-3 w-3 mr-1" /> Enviar Concorrente
-          </Badge>
-          <Badge
-            variant="secondary"
-            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-green-500/10 text-green-600 border-green-500/20"
-            onClick={handleSimulateSurvey}
-          >
-            <Bot className="h-3 w-3 mr-1" /> Disparar CSAT
+            <Clock className="h-3 w-3 mr-1" /> Abandono Cad.
           </Badge>
         </div>
       </div>
