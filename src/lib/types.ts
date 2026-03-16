@@ -1,10 +1,15 @@
 export type Platform = 'whatsapp' | 'instagram'
 
+export type MessageType = 'text' | 'audio' | 'document' | 'image'
+
 export interface Message {
   id: string
   text: string
   sender: 'user' | 'ai' | 'human'
   timestamp: string
+  type?: MessageType
+  fileUrl?: string
+  transcription?: string
 }
 
 export interface Chat {
@@ -18,6 +23,8 @@ export interface Chat {
   avatarUrl?: string
   notes?: string
   history?: string[]
+  followUpStep?: number
+  lastActivity?: string
 }
 
 export interface ServiceItem {

@@ -57,19 +57,35 @@ export default function ChatList({ className }: { className?: string }) {
                       {lastMsg?.timestamp}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground truncate mt-0.5">{lastMsg?.text}</p>
+                  <p className="text-xs text-muted-foreground truncate mt-0.5">
+                    {lastMsg?.type === 'audio'
+                      ? '🎵 Mensagem de áudio'
+                      : lastMsg?.type === 'document'
+                        ? '📄 Documento anexado'
+                        : lastMsg?.text}
+                  </p>
                   <div className="flex items-center justify-between mt-2">
-                    <Badge
-                      variant="secondary"
-                      className="text-[9px] px-1.5 h-4 bg-muted-foreground/10 text-muted-foreground"
-                    >
-                      {chat.lineName}
-                    </Badge>
+                    <div className="flex items-center gap-1.5 overflow-hidden">
+                      <Badge
+                        variant="secondary"
+                        className="text-[9px] px-1.5 h-4 bg-muted-foreground/10 text-muted-foreground truncate"
+                      >
+                        {chat.lineName}
+                      </Badge>
+                      {(chat.followUpStep ?? 0) > 0 && (
+                        <Badge
+                          variant="outline"
+                          className="text-[9px] px-1.5 h-4 border-amber-500/30 text-amber-600 dark:text-amber-500 bg-amber-500/10 whitespace-nowrap"
+                        >
+                          Follow-up {chat.followUpStep}/12
+                        </Badge>
+                      )}
+                    </div>
                     {chat.status === 'pending_human' && (
-                      <AlertCircle className="h-3.5 w-3.5 text-destructive animate-pulse" />
+                      <AlertCircle className="h-3.5 w-3.5 text-destructive animate-pulse shrink-0 ml-1" />
                     )}
                     {chat.unreadCount > 0 && (
-                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground font-medium">
+                      <span className="flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[9px] text-primary-foreground font-medium shrink-0 ml-1">
                         {chat.unreadCount}
                       </span>
                     )}

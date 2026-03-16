@@ -1,7 +1,8 @@
-import { FileText, User, Calendar, MapPin, Clock } from 'lucide-react'
+import { FileText, User, Calendar, MapPin, Clock, Activity } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
+import { Progress } from '@/components/ui/progress'
 import useAppStore from '@/stores/useAppStore'
 import { cn } from '@/lib/utils'
 
@@ -29,7 +30,30 @@ export default function ContactDetails({ className }: { className?: string }) {
           </div>
           <div className="flex items-center gap-2 text-sm">
             <Clock className="h-4 w-4 text-muted-foreground" />
-            <span>Última interação: Hoje</span>
+            <span>Última interação: {chat.lastActivity || 'Hoje'}</span>
+          </div>
+        </div>
+
+        <Separator />
+
+        <div>
+          <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
+            <Activity className="h-3 w-3" /> Status de Engajamento
+          </h4>
+          <div className="bg-muted/50 rounded-lg p-3 text-sm border border-border/50">
+            <div className="flex justify-between items-center mb-2">
+              <span className="text-muted-foreground text-xs">Acompanhamento:</span>
+              <span className="font-medium text-xs">
+                {(chat.followUpStep ?? 0) > 0
+                  ? `Passo ${chat.followUpStep} de 12`
+                  : 'Ativo / Sem pendência'}
+              </span>
+            </div>
+            <Progress value={((chat.followUpStep ?? 0) / 12) * 100} className="h-1.5" />
+            <p className="text-[10px] text-muted-foreground mt-2 leading-tight">
+              O sistema envia até 12 mensagens automatizadas para reengajar pacientes inativos e
+              focar na conversão de exames.
+            </p>
           </div>
         </div>
 
@@ -42,7 +66,7 @@ export default function ContactDetails({ className }: { className?: string }) {
           <Textarea
             defaultValue={chat.notes || ''}
             placeholder="Adicione observações importantes sobre o paciente..."
-            className="min-h-[100px] text-sm resize-none"
+            className="min-h-[80px] text-sm resize-none"
           />
         </div>
 
