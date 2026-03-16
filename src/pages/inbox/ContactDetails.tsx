@@ -89,6 +89,29 @@ export default function ContactDetails({ className }: { className?: string }) {
                     </span>
                   </div>
 
+                  {(chat.patientData.isDiabetic !== undefined || chat.patientData.examReason) && (
+                    <>
+                      <div className="col-span-full h-px bg-primary/20 my-1" />
+                      <div className="flex flex-col">
+                        <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                          Perfil Clínico
+                        </span>
+                        <span className="font-medium">
+                          {chat.patientData.isDiabetic ? 'Diabético' : 'Não Diabético'} •{' '}
+                          {chat.patientData.isHypertensive ? 'Hipertenso' : 'Não Hipertenso'}
+                        </span>
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                          Motivo dos Exames
+                        </span>
+                        <span className="font-medium">
+                          {chat.patientData.examReason || 'Não informado'}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
                   <div className="flex flex-col col-span-full mt-2 space-y-2">
                     {chat.patientData.idDocumentProvided && (
                       <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-1.5 rounded border border-emerald-500/20">

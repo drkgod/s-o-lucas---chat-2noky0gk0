@@ -11,6 +11,9 @@ export interface RegistrationData {
   coverageName?: string
   idDocumentProvided?: boolean
   insuranceCardProvided?: boolean
+  isDiabetic?: boolean
+  isHypertensive?: boolean
+  examReason?: string
 }
 
 export interface Message {
@@ -22,6 +25,7 @@ export interface Message {
   fileUrl?: string
   transcription?: string
   registrationData?: RegistrationData
+  options?: string[]
 }
 
 export interface Chat {

@@ -189,40 +189,97 @@ export default function ChatArea({ className }: { className?: string }) {
           type: 'image',
           fileUrl: 'https://img.usecurling.com/p/300/200?q=health%20insurance%20card',
         })
-        simulateAIResponse('Tudo certo! Confirme os dados do seu pré-cadastro abaixo:', 2500, {
-          type: 'registration_card',
-          registrationData: {
-            name: 'Maria Oliveira',
-            dob: '12/05/1990',
-            cpf: '098.765.432-10',
-            address: 'Avenida Paulista, 1000',
-            coverageType: 'Plano de Saúde',
-            coverageName: 'Amil',
-            idDocumentProvided: true,
-            insuranceCardProvided: true,
-          },
-        })
+        simulateAIResponse(
+          'Tudo certo! Para finalizar o seu pré-cadastro e fornecer o contexto correto para o laboratório, preciso de algumas informações clínicas rápidas:\n\nÉ diabético?',
+          2500,
+          { options: ['Sim', 'Não'] },
+        )
+
         setTimeout(() => {
-          setChats((prev) =>
-            prev.map((c) =>
-              c.id === chat.id
-                ? {
-                    ...c,
-                    patientData: {
-                      name: 'Maria Oliveira',
-                      dob: '12/05/1990',
-                      cpf: '098.765.432-10',
-                      address: 'Avenida Paulista, 1000',
-                      coverageType: 'Plano de Saúde',
-                      coverageName: 'Amil',
-                      idDocumentProvided: true,
-                      insuranceCardProvided: true,
-                    },
-                  }
-                : c,
-            ),
-          )
-        }, 3000)
+          addMessage({
+            id: (Date.now() + 5).toString(),
+            text: 'Não',
+            sender: 'user',
+            timestamp: 'Agora',
+            type: 'text',
+          })
+          simulateAIResponse('Entendido. É hipertenso?', 2000, { options: ['Sim', 'Não'] })
+
+          setTimeout(() => {
+            addMessage({
+              id: (Date.now() + 6).toString(),
+              text: 'Não',
+              sender: 'user',
+              timestamp: 'Agora',
+              type: 'text',
+            })
+            simulateAIResponse('Certo. Por fim, qual o motivo da realização dos exames?', 2000, {
+              options: [
+                'Avaliação clínica',
+                'Pré-operatório',
+                'Investigação de alguma doença',
+                'Pré-natal',
+                'Check-up',
+                'Outros',
+              ],
+            })
+
+            setTimeout(() => {
+              addMessage({
+                id: (Date.now() + 7).toString(),
+                text: 'Check-up',
+                sender: 'user',
+                timestamp: 'Agora',
+                type: 'text',
+              })
+
+              simulateAIResponse(
+                'Tudo pronto! Confirme os dados do seu pré-cadastro abaixo:',
+                2500,
+                {
+                  type: 'registration_card',
+                  registrationData: {
+                    name: 'Maria Oliveira',
+                    dob: '12/05/1990',
+                    cpf: '098.765.432-10',
+                    address: 'Avenida Paulista, 1000',
+                    coverageType: 'Plano de Saúde',
+                    coverageName: 'Amil',
+                    idDocumentProvided: true,
+                    insuranceCardProvided: true,
+                    isDiabetic: false,
+                    isHypertensive: false,
+                    examReason: 'Check-up',
+                  },
+                },
+              )
+              setTimeout(() => {
+                setChats((prev) =>
+                  prev.map((c) =>
+                    c.id === chat.id
+                      ? {
+                          ...c,
+                          patientData: {
+                            name: 'Maria Oliveira',
+                            dob: '12/05/1990',
+                            cpf: '098.765.432-10',
+                            address: 'Avenida Paulista, 1000',
+                            coverageType: 'Plano de Saúde',
+                            coverageName: 'Amil',
+                            idDocumentProvided: true,
+                            insuranceCardProvided: true,
+                            isDiabetic: false,
+                            isHypertensive: false,
+                            examReason: 'Check-up',
+                          },
+                        }
+                      : c,
+                  ),
+                )
+              }, 3000)
+            }, 6000)
+          }, 6000)
+        }, 6000)
       }, 1500)
     }, 16000)
   }
@@ -399,8 +456,20 @@ export default function ChatArea({ className }: { className?: string }) {
                       />
                     </div>
                   )}
-                  {!isAudio && !isDocument && !isImage && (
+                  {!isAudio && !isDocument && !isImage && !isRegistrationCard && (
                     <span className="whitespace-pre-wrap">{m.text}</span>
+                  )}
+                  {m.options && m.options.length > 0 && (
+                    <div className="mt-3 flex flex-col gap-1.5 w-full">
+                      {m.options.map((opt, i) => (
+                        <div
+                          key={i}
+                          className="bg-primary/5 border border-primary/20 rounded-md px-3 py-2 text-center text-sm font-medium text-primary shadow-sm"
+                        >
+                          {opt}
+                        </div>
+                      ))}
+                    </div>
                   )}
 
                   {isRegistrationCard && m.registrationData && (
@@ -447,6 +516,28 @@ export default function ChatArea({ className }: { className?: string }) {
                               : ''}
                           </span>
                         </div>
+                        {(m.registrationData.isDiabetic !== undefined ||
+                          m.registrationData.examReason) && (
+                          <>
+                            <div className="flex flex-col mt-1">
+                              <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                                Perfil Clínico
+                              </span>
+                              <span className="font-medium">
+                                {m.registrationData.isDiabetic ? 'Diabético' : 'Não Diabético'} •{' '}
+                                {m.registrationData.isHypertensive
+                                  ? 'Hipertenso'
+                                  : 'Não Hipertenso'}
+                              </span>
+                            </div>
+                            <div className="flex flex-col">
+                              <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                                Motivo dos Exames
+                              </span>
+                              <span className="font-medium">{m.registrationData.examReason}</span>
+                            </div>
+                          </>
+                        )}
                       </div>
                       <div className="mt-2 pt-2 border-t flex justify-end gap-2">
                         <Button
