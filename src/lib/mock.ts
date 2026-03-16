@@ -56,6 +56,7 @@ export const mockChats: Chat[] = [
     history: ['Exame Toxicológico (15/02/2024)'],
     followUpStep: 3,
     lastActivity: 'Ontem',
+    surveyResult: 5,
     messages: [
       {
         id: 'm1',
@@ -104,6 +105,7 @@ export const mockChats: Chat[] = [
     avatarUrl: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=3',
     followUpStep: 0,
     lastActivity: 'Agora',
+    lostReason: 'price',
     messages: [
       {
         id: 'm1',

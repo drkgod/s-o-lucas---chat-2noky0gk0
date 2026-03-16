@@ -25,6 +25,8 @@ export interface Chat {
   history?: string[]
   followUpStep?: number
   lastActivity?: string
+  surveyResult?: number
+  lostReason?: 'price' | 'payment_method' | 'availability' | 'competitor' | 'other'
 }
 
 export interface ServiceItem {

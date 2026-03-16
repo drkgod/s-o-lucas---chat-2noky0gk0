@@ -2,6 +2,8 @@ import KpiCards from './dashboard/KpiCards'
 import ActivityChart from './dashboard/ActivityChart'
 import ServiceChart from './dashboard/ServiceChart'
 import AlertsList from './dashboard/AlertsList'
+import LostReasonsChart from './dashboard/LostReasonsChart'
+import SurveyResults from './dashboard/SurveyResults'
 
 export default function Index() {
   return (
@@ -24,8 +26,16 @@ export default function Index() {
         </div>
       </div>
 
-      <div className="grid gap-4 grid-cols-1">
-        <AlertsList />
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+        <div className="lg:col-span-1">
+          <LostReasonsChart />
+        </div>
+        <div className="lg:col-span-1">
+          <SurveyResults />
+        </div>
+        <div className="lg:col-span-1">
+          <AlertsList />
+        </div>
       </div>
     </div>
   )

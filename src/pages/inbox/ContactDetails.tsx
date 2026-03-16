@@ -1,8 +1,9 @@
-import { FileText, User, Calendar, MapPin, Clock, Activity } from 'lucide-react'
+import { FileText, User, Calendar, MapPin, Clock, Activity, Star, AlertCircle } from 'lucide-react'
 import { Card, CardContent } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Textarea } from '@/components/ui/textarea'
 import { Progress } from '@/components/ui/progress'
+import { Badge } from '@/components/ui/badge'
 import useAppStore from '@/stores/useAppStore'
 import { cn } from '@/lib/utils'
 
@@ -33,6 +34,48 @@ export default function ContactDetails({ className }: { className?: string }) {
             <span>Última interação: {chat.lastActivity || 'Hoje'}</span>
           </div>
         </div>
+
+        {chat.surveyResult && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
+                <Star className="h-3 w-3" /> Satisfação (CSAT)
+              </h4>
+              <div className="flex items-center gap-1 bg-muted/30 p-2 rounded-md border">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <Star
+                    key={star}
+                    className={cn(
+                      'h-4 w-4',
+                      star <= (chat.surveyResult || 0)
+                        ? 'text-yellow-400 fill-yellow-400'
+                        : 'text-muted-foreground/30',
+                    )}
+                  />
+                ))}
+                <span className="text-xs font-medium ml-2">{chat.surveyResult}/5 Estrelas</span>
+              </div>
+            </div>
+          </>
+        )}
+
+        {chat.lostReason && (
+          <>
+            <Separator />
+            <div>
+              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
+                <AlertCircle className="h-3 w-3 text-destructive" /> Motivo da Perda / Objeção
+              </h4>
+              <Badge
+                variant="outline"
+                className="text-destructive border-destructive/30 bg-destructive/5 capitalize"
+              >
+                {chat.lostReason.replace('_', ' ')}
+              </Badge>
+            </div>
+          </>
+        )}
 
         <Separator />
 

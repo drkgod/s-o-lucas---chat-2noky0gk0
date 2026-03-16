@@ -130,6 +130,56 @@ export default function ChatArea({ className }: { className?: string }) {
     )
   }
 
+  const handleSimulateRefusal = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Achei o valor alto, não vou fazer agora.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+    simulateAIResponse(
+      'Entendo perfeitamente! Gostaria de pedir uma última chance para fecharmos. Você chegou a cotar em outro laboratório? Se sim, poderia me enviar uma foto ou PDF do orçamento? Vou conversar com o supervisor para ajustar uma melhor forma de atender, mas não irei deixar de atender.',
+      2500,
+    )
+  }
+
+  const handleSimulateCompetitor = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: '',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'document',
+      transcription:
+        'Conteúdo extraído via OCR:\nOrçamento Laboratório Concorrente\nTotal: R$ 120,00',
+    })
+    simulateAIResponse(
+      'Analisando o orçamento enviado... Vejo que a diferença está no valor total e nas condições de pagamento.\n\nFalei com meu supervisor e conseguimos cobrir esse valor de R$ 120,00 e ainda parcelar em até 3x sem juros para você. O que acha de fecharmos agora?',
+      3500,
+    )
+  }
+
+  const handleSimulateSurvey = () => {
+    simulateAIResponse(
+      'Seu atendimento foi concluído! Como você avalia sua experiência conosco de 1 a 5?\n\n1 - Muito Ruim\n2 - Ruim\n3 - Regular\n4 - Bom\n5 - Excelente',
+      1000,
+    )
+    setTimeout(() => {
+      addMessage({
+        id: Date.now().toString(),
+        text: '5',
+        sender: 'user',
+        timestamp: 'Agora',
+        type: 'text',
+      })
+      simulateAIResponse(
+        'Agradecemos muito pela sua avaliação! Conte sempre com a Clínica Multicanal.',
+        1500,
+      )
+    }, 4000)
+  }
+
   return (
     <div className={cn('flex flex-col bg-background', className)}>
       <div className="flex items-center justify-between border-b px-6 py-4 shadow-sm z-10">
@@ -239,7 +289,7 @@ export default function ChatArea({ className }: { className?: string }) {
                           <FileText className="h-5 w-5" />
                         </div>
                         <div className="flex flex-col">
-                          <span className="text-sm font-medium">Requisicao_Medica.pdf</span>
+                          <span className="text-sm font-medium">Documento.pdf</span>
                           <span className="text-[10px] opacity-70">1.2 MB • PDF</span>
                         </div>
                       </div>
@@ -300,17 +350,7 @@ export default function ChatArea({ className }: { className?: string }) {
         </div>
         <div className="flex gap-2 mt-3 overflow-x-auto pb-1 hide-scrollbar items-center">
           <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center mr-1 shrink-0">
-            Atendente:
-          </span>
-          <Badge variant="outline" className="cursor-pointer hover:bg-muted font-normal shrink-0">
-            <CornerUpLeft className="h-3 w-3 mr-1" /> Preparo Jejum
-          </Badge>
-          <Badge variant="outline" className="cursor-pointer hover:bg-muted font-normal shrink-0">
-            <CornerUpLeft className="h-3 w-3 mr-1" /> Link Pagamento
-          </Badge>
-
-          <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center ml-2 mr-1 shrink-0 border-l pl-4">
-            Simular (IA/Paciente):
+            Simular (IA):
           </span>
           <Badge
             variant="secondary"
@@ -324,14 +364,39 @@ export default function ChatArea({ className }: { className?: string }) {
             className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
             onClick={handleSimulateDocument}
           >
-            <Paperclip className="h-3 w-3 mr-1" /> Enviar PDF (OCR)
+            <Paperclip className="h-3 w-3 mr-1" /> PDF (OCR)
           </Badge>
           <Badge
             variant="secondary"
             className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
             onClick={handleSimulateAudio}
           >
-            <Mic className="h-3 w-3 mr-1" /> Enviar Áudio
+            <Mic className="h-3 w-3 mr-1" /> Áudio
+          </Badge>
+
+          <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center ml-2 mr-1 shrink-0 border-l pl-4">
+            Recuperação/CSAT:
+          </span>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-destructive/10 text-destructive border-destructive/20"
+            onClick={handleSimulateRefusal}
+          >
+            <User className="h-3 w-3 mr-1" /> Recusar Preço
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
+            onClick={handleSimulateCompetitor}
+          >
+            <Paperclip className="h-3 w-3 mr-1" /> Enviar Concorrente
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-green-500/10 text-green-600 border-green-500/20"
+            onClick={handleSimulateSurvey}
+          >
+            <Bot className="h-3 w-3 mr-1" /> Disparar CSAT
           </Badge>
         </div>
       </div>
