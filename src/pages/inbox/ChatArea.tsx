@@ -10,13 +10,11 @@ import {
   Mic,
   Paperclip,
   ClipboardCheck,
-  Clock,
-  Droplet,
-  Stethoscope,
-  BookOpen,
   HeartPulse,
+  BookOpen,
   Download,
   BellRing,
+  Stethoscope,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -157,7 +155,6 @@ export default function ChatArea({ className }: { className?: string }) {
       2500,
     )
 
-    // Simulating sequence of registration...
     setTimeout(() => {
       addMessage({
         id: (Date.now() + 1).toString(),
@@ -241,6 +238,71 @@ export default function ChatArea({ className }: { className?: string }) {
       'Olá! 🌸 \n\nLembrete Automático: O seu exame Preventivo (Papanicolau) está agendado para daqui a exatamente 72 horas.\n\nPara garantir a precisão dos seus resultados e evitar a necessidade de recoleta, é **fundamental** que você siga rigorosamente estas 3 instruções de preparo a partir de hoje:\n\n1️⃣ **Ciclo Menstrual**: Não realizar o exame em período menstrual (lembrando que as melhores datas são após o 10º dia do ciclo, sendo o ideal no 14º ou 15º dia).\n2️⃣ **Abstinência**: Mantenha um mínimo de 48 horas de abstinência sexual prévia à coleta.\n3️⃣ **Produtos Vaginais**: Não utilizar duchas vaginais, medicações locais ou cremes nas 48 horas anteriores à coleta do exame.\n\nSe tiver qualquer dúvida sobre o preparo ou precisar reagendar, basta me avisar por aqui!',
       1000,
     )
+  }
+
+  const handleSimulateConsultativeSales = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Oi, preciso fazer os exames dessa guia: Hemograma e TSH.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+    simulateAIResponse(
+      'Olá! Identifiquei os exames Hemograma Completo e TSH na sua requisição. O valor total fica R$ 65,00.\n\nNotamos que para um acompanhamento mais completo da sua saúde, faltam alguns exames essenciais de rotina recomendados, como Vitamina D, Vitamina B12, Hemoglobina Glicada, Glicemia de Jejum, além do Perfil Lipídico, Hepático e Renal.\n\nComo nosso foco é o seu cuidado integral e prevenção, gostaria de incluí-los no seu orçamento para aproveitarmos a mesma coleta?',
+      2500,
+    )
+
+    setTimeout(() => {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        text: 'Acho que vai ficar muito caro, prefiro fazer só os do médico mesmo.',
+        sender: 'user',
+        timestamp: 'Agora',
+        type: 'text',
+      })
+
+      setTimeout(() => {
+        simulateAIResponse(
+          'Entendo perfeitamente. O cuidado com a saúde às vezes pesa no orçamento. Posso perguntar se o motivo seria apenas o valor ou se há outra dúvida sobre a necessidade desses exames?',
+          2500,
+        )
+
+        setTimeout(() => {
+          addMessage({
+            id: (Date.now() + 2).toString(),
+            text: 'É mais pelo valor mesmo, no momento não dá.',
+            sender: 'user',
+            timestamp: 'Agora',
+            type: 'text',
+          })
+
+          setTimeout(() => {
+            simulateAIResponse(
+              'Compreendo totalmente. Pensando no seu bem-estar e para que não deixe de cuidar da sua saúde por completo, consigo aplicar um desconto especial de 15% exclusivamente nesses exames adicionais.\n\nAlém disso, posso parcelar o valor total do orçamento em até 3x sem juros no cartão.\n\nO que acha de aproveitarmos essa facilidade?',
+              3000,
+            )
+
+            setTimeout(() => {
+              addMessage({
+                id: (Date.now() + 3).toString(),
+                text: 'Ah, com esse desconto e podendo parcelar fica bom, pode incluir.',
+                sender: 'user',
+                timestamp: 'Agora',
+                type: 'text',
+              })
+
+              setTimeout(() => {
+                simulateAIResponse(
+                  'Fico muito feliz que tenha decidido priorizar sua saúde preventiva! 💙\n\nO novo orçamento atualizado ficou assim:\n- Hemograma Completo: R$ 45,00\n- TSH: R$ 20,00\n- Exames Check-up Integral (c/ 15% desc.): R$ 102,00\n\nTotal: R$ 167,00 (em até 3x de R$ 55,66 sem juros)\n\nPodemos prosseguir com o agendamento?',
+                  3000,
+                )
+              }, 3000)
+            }, 6000)
+          }, 3000)
+        }, 5000)
+      }, 3000)
+    }, 6000)
   }
 
   return (
@@ -533,6 +595,13 @@ export default function ChatArea({ className }: { className?: string }) {
           <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center mr-1 shrink-0">
             Simular (IA):
           </span>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-emerald-500/20 font-medium shrink-0 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
+            onClick={handleSimulateConsultativeSales}
+          >
+            <Stethoscope className="h-3 w-3 mr-1" /> Venda Consultiva
+          </Badge>
           <Badge
             variant="secondary"
             className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
