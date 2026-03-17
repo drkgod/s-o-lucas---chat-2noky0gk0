@@ -16,6 +16,7 @@ import {
   BellRing,
   Stethoscope,
   ShieldCheck,
+  Microscope,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -371,6 +372,35 @@ export default function ChatArea({ className }: { className?: string }) {
     }, 6000)
   }
 
+  const handleSimulateSpermogram = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Olá, gostaria de agendar um espermograma.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+
+    simulateAIResponse(
+      'Olá! Parabéns por buscar essa avaliação tão importante para a saúde masculina e reprodutiva. É um passo fundamental para o seu cuidado integral e estamos aqui para te apoiar! 💙\n\nAqui em nossa clínica, o Espermograma é realizado sob a supervisão direta do **Dr. Rafael Toledo**, especialista em infertilidade e reprodução humana. Ele é um verdadeiro expert neste exame, sendo referência em todo o estado de Alagoas e o primeiro biomédico especialista nesta área por aqui!',
+      2500,
+    )
+
+    setTimeout(() => {
+      simulateAIResponse(
+        'Para garantir a máxima excelência e precisão dos seus resultados, utilizamos a metodologia de **Morfologia Estrita de Kruger** no processamento do seu exame.\n\nAntes de seguirmos com o agendamento, preciso passar algumas instruções de preparo (pré-analíticas) que são estritamente necessárias para a qualidade da amostra:\n\n1️⃣ **Abstinência Sexual**: É obrigatório manter um período de 2 a 5 dias de abstinência sexual.\n2️⃣ **Coleta**: Você deve coletar o volume total do ejaculado (todos os jatos). É muito importante que nenhum volume do esperma seja perdido durante a coleta.',
+        3000,
+      )
+
+      setTimeout(() => {
+        simulateAIResponse(
+          'Sobre a entrega do material, oferecemos duas opções para sua maior comodidade:\n\n📍 **No Laboratório**: Em uma sala adequada e preparada.\n🏠 **Em Casa**: Caso prefira, você pode coletar em casa, mas a amostra deve ser entregue no laboratório em no **máximo 30 minutos**.\n⚠️ *Atenção:* Em hipótese alguma refrigere a amostra. Ela deve ser transportada em temperatura ambiente.\n\nPor fim, informo que enviaremos um breve **questionário de anamnese** que deve ser respondido e devolvido ao laboratório junto com a amostra.\n\nQual opção de local para coleta você prefere?',
+          4000,
+        )
+      }, 6500)
+    }, 6000)
+  }
+
   return (
     <div className={cn('flex flex-col bg-background', className)}>
       <div className="flex items-center justify-between border-b px-6 py-4 shadow-sm z-10">
@@ -667,6 +697,13 @@ export default function ChatArea({ className }: { className?: string }) {
             onClick={handleSimulatePSA}
           >
             <ShieldCheck className="h-3 w-3 mr-1" /> Saúde Masculina (PSA)
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-indigo-500/20 font-medium shrink-0 bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border-indigo-500/20"
+            onClick={handleSimulateSpermogram}
+          >
+            <Microscope className="h-3 w-3 mr-1" /> Espermograma
           </Badge>
           <Badge
             variant="secondary"
