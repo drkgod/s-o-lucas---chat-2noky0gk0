@@ -12,6 +12,7 @@ import {
   ClipboardCheck,
   Clock,
   Droplet,
+  Stethoscope,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -317,6 +318,53 @@ export default function ChatArea({ className }: { className?: string }) {
       )
       setChats((prev) => prev.map((c) => (c.id === chat.id ? { ...c, followUpStep: 1 } : c)))
     }, 7000)
+  }
+
+  const handleSimulatePreventive = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Oi, a médica pediu para eu fazer um Hemograma e um Sumário de Urina.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+
+    simulateAIResponse(
+      'Olá! Identifiquei os seus exames: Hemograma Completo (R$ 45,00) e Sumário de Urina (R$ 25,00).\n\nComo parte do nosso cuidado "Padrão Ouro" com a saúde da mulher, notei que não há solicitação para o exame Preventivo (também conhecido como Papanicolau ou Citologia Oncótica).\n\nFaz mais de um ano desde que você realizou seu último exame preventivo?',
+      2500,
+      { options: ['Sim, faz mais de um ano', 'Não, fiz recentemente'] },
+    )
+
+    setTimeout(() => {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        text: 'Sim, faz mais de um ano',
+        sender: 'user',
+        timestamp: 'Agora',
+        type: 'text',
+      })
+
+      simulateAIResponse(
+        'Entendo! O Preventivo é uma medida fundamental para a prevenção do câncer de colo de útero. Aproveitando que você já fará outros exames conosco, gostaria de incluir o Preventivo (Papanicolau) no seu pedido de hoje? Isso ajuda a poupar o seu tempo e garante que seu rastreio de saúde fique em dia!',
+        2500,
+        { options: ['Sim, pode incluir', 'Não, apenas os que a médica pediu'] },
+      )
+
+      setTimeout(() => {
+        addMessage({
+          id: (Date.now() + 2).toString(),
+          text: 'Sim, pode incluir',
+          sender: 'user',
+          timestamp: 'Agora',
+          type: 'text',
+        })
+
+        simulateAIResponse(
+          'Excelente escolha para a sua saúde! Adicionei o Preventivo (Citologia Oncótica) ao seu pedido.\n\nAqui está o seu orçamento atualizado:\n- Hemograma Completo: R$ 45,00\n- Sumário de Urina: R$ 25,00\n- Preventivo (Papanicolau): R$ 80,00\n\nTotal atualizado: R$ 150,00\n\nDeseja agendar o seu atendimento na clínica ou prefere utilizar o nosso serviço de Coleta Domiciliar?',
+          2500,
+        )
+      }, 6000)
+    }, 6000)
   }
 
   return (
@@ -635,6 +683,13 @@ export default function ChatArea({ className }: { className?: string }) {
             onClick={handleSimulateUrineTest}
           >
             <Droplet className="h-3 w-3 mr-1" /> Exame de Urina
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
+            onClick={handleSimulatePreventive}
+          >
+            <Stethoscope className="h-3 w-3 mr-1" /> Upsell Preventivo
           </Badge>
           <Badge
             variant="secondary"

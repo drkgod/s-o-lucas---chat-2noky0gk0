@@ -211,4 +211,11 @@ export const mockServices: ServiceItem[] = [
     instructions:
       'Utilizar coletor estéril. Coletar segundo jato de urina após higienizar a região íntima. Secar bem antes de coletar.',
   },
+  {
+    id: 's8',
+    category: 'exam',
+    name: 'Preventivo (Papanicolau / Citologia Oncótica)',
+    price: 'R$ 80,00',
+    instructions: 'Abstinência sexual de 48h. Não utilizar cremes vaginais.',
+  },
 ]
