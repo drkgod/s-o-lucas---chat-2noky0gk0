@@ -221,15 +221,15 @@ export default function ChatArea({ className }: { className?: string }) {
 
     setTimeout(() => {
       simulateAIResponse(
-        'Para ajudar você a descomplicar de vez esse cuidado com a sua saúde e se sentir ainda mais confiante, nós preparamos um material educativo exclusivo e gratuito.\n\nAproveite e baixe agora mesmo, mesmo que você ainda não agende conosco hoje:',
+        'Para ajudar você a descomplicar de vez esse cuidado com a sua saúde e se sentir ainda mais confiante, o Dr. Rafael Toledo, que também é especialista em citologia clínica, preparou um material educativo exclusivo e gratuito.\n\nAproveite e baixe agora mesmo o e-book "O Seu Preventivo Descomplicado", mesmo que você ainda não agende conosco hoje:',
         3000,
         {
           ebookData: {
-            title: 'Seu exame preventivo descomplicado',
+            title: 'O Seu Preventivo Descomplicado',
             author: 'Dr. Rafael Toledo',
             coverUrl:
               'https://img.usecurling.com/p/200/300?q=female%20health%20book%20cover&color=pink',
-            downloadUrl: 'https://example.com/exame-preventivo-descomplicado.pdf',
+            downloadUrl: 'https://drive.google.com/file/d/1vJu0GxtfhXZPSEspDtBjbbUn3qSj4l0V/view',
           },
         },
       )
@@ -401,15 +401,16 @@ export default function ChatArea({ className }: { className?: string }) {
 
         setTimeout(() => {
           simulateAIResponse(
-            'Enquanto você escolhe a melhor opção, preparamos um material educativo exclusivo e gratuito para ajudar você a entender melhor o seu exame e a saúde reprodutiva masculina.\n\nAproveite e baixe agora mesmo o e-book "Mapa da Fertilidade Masculina, entendendo o espermograma", desenvolvido pelo nosso especialista Dr. Rafael Toledo:',
+            'Enquanto você escolhe a melhor opção, preparamos um material educativo exclusivo e gratuito para ajudar você a entender melhor o seu exame, os resultados e o processo.\n\nAproveite e baixe agora mesmo o e-book "Mapa da Fertilidade Masculina", desenvolvido pelo nosso especialista Dr. Rafael Toledo:',
             3000,
             {
               ebookData: {
-                title: 'Mapa da Fertilidade Masculina, entendendo o espermograma',
+                title: 'Mapa da Fertilidade Masculina',
                 author: 'Dr. Rafael Toledo',
                 coverUrl:
                   'https://img.usecurling.com/p/200/300?q=male%20health%20book%20cover&color=blue',
-                downloadUrl: 'https://example.com/mapa-fertilidade-masculina.pdf',
+                downloadUrl:
+                  'https://drive.google.com/file/d/1OyCUK7FjjXFYtiF9Ufl8DKLEEs3Kr6eT/view',
               },
             },
           )
