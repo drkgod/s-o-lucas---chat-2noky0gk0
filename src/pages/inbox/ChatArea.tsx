@@ -229,6 +229,7 @@ export default function ChatArea({ className }: { className?: string }) {
             author: 'Dr. Rafael Toledo',
             coverUrl:
               'https://img.usecurling.com/p/200/300?q=female%20health%20book%20cover&color=pink',
+            downloadUrl: 'https://example.com/exame-preventivo-descomplicado.pdf',
           },
         },
       )
@@ -397,6 +398,22 @@ export default function ChatArea({ className }: { className?: string }) {
           'Sobre a entrega do material, oferecemos duas opções para sua maior comodidade:\n\n📍 **No Laboratório**: Em uma sala adequada e preparada.\n🏠 **Em Casa**: Caso prefira, você pode coletar em casa, mas a amostra deve ser entregue no laboratório em no **máximo 30 minutos**.\n⚠️ *Atenção:* Em hipótese alguma refrigere a amostra. Ela deve ser transportada em temperatura ambiente.\n\nPor fim, informo que enviaremos um breve **questionário de anamnese** que deve ser respondido e devolvido ao laboratório junto com a amostra.\n\nQual opção de local para coleta você prefere?',
           4000,
         )
+
+        setTimeout(() => {
+          simulateAIResponse(
+            'Enquanto você escolhe a melhor opção, preparamos um material educativo exclusivo e gratuito para ajudar você a entender melhor o seu exame e a saúde reprodutiva masculina.\n\nAproveite e baixe agora mesmo o e-book "Mapa da Fertilidade Masculina, entendendo o espermograma", desenvolvido pelo nosso especialista Dr. Rafael Toledo:',
+            3000,
+            {
+              ebookData: {
+                title: 'Mapa da Fertilidade Masculina, entendendo o espermograma',
+                author: 'Dr. Rafael Toledo',
+                coverUrl:
+                  'https://img.usecurling.com/p/200/300?q=male%20health%20book%20cover&color=blue',
+                downloadUrl: 'https://example.com/mapa-fertilidade-masculina.pdf',
+              },
+            },
+          )
+        }, 8000)
       }, 6500)
     }, 6000)
   }
@@ -608,9 +625,16 @@ export default function ChatArea({ className }: { className?: string }) {
                         </span>
                         <Button
                           size="sm"
-                          className="h-7 text-[11px] px-3 w-full justify-start gap-2 bg-pink-500/10 text-pink-600 hover:bg-pink-500/20 hover:text-pink-700 dark:bg-pink-500/20 dark:text-pink-400 dark:hover:bg-pink-500/30 border-0 shadow-none"
+                          asChild
+                          className="h-7 text-[11px] px-3 w-full justify-start gap-2 bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/20 dark:text-primary dark:hover:bg-primary/30 border-0 shadow-none"
                         >
-                          <Download className="h-3.5 w-3.5" /> Acessar E-book
+                          <a
+                            href={m.ebookData.downloadUrl || '#'}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            <Download className="h-3.5 w-3.5" /> Acessar E-book
+                          </a>
                         </Button>
                       </div>
                     </div>
