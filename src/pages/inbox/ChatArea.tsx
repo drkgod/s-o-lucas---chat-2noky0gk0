@@ -15,6 +15,7 @@ import {
   Download,
   BellRing,
   Stethoscope,
+  ShieldCheck,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -295,6 +296,71 @@ export default function ChatArea({ className }: { className?: string }) {
               setTimeout(() => {
                 simulateAIResponse(
                   'Fico muito feliz que tenha decidido priorizar sua saúde preventiva! 💙\n\nO novo orçamento atualizado ficou assim:\n- Hemograma Completo: R$ 45,00\n- TSH: R$ 20,00\n- Exames Check-up Integral (c/ 15% desc.): R$ 102,00\n\nTotal: R$ 167,00 (em até 3x de R$ 55,66 sem juros)\n\nPodemos prosseguir com o agendamento?',
+                  3000,
+                )
+              }, 3000)
+            }, 6000)
+          }, 3000)
+        }, 5000)
+      }, 3000)
+    }, 6000)
+  }
+
+  const handleSimulatePSA = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Olá, gostaria de fazer apenas um hemograma de rotina.',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+    simulateAIResponse(
+      'Olá! Claro, o valor do Hemograma Completo é R$ 45,00.\n\nNotei no seu perfil que você tem mais de 40 anos. Como o nosso foco é o cuidado integral com a sua saúde, gostaria de sugerir também a inclusão dos exames PSA Total e PSA Livre.\n\nO câncer de próstata é o tipo de câncer mais comum entre os homens, e a prevenção e o diagnóstico precoce são sempre o melhor caminho. Gostaria de incluí-los no seu orçamento para aproveitarmos a mesma coleta?',
+      2500,
+    )
+
+    setTimeout(() => {
+      addMessage({
+        id: (Date.now() + 1).toString(),
+        text: 'Poxa, acho que vai ficar meio caro agora, vou fazer só o hemograma mesmo.',
+        sender: 'user',
+        timestamp: 'Agora',
+        type: 'text',
+      })
+
+      setTimeout(() => {
+        simulateAIResponse(
+          'Compreendo perfeitamente. O cuidado com a saúde às vezes pesa no orçamento. Posso perguntar se o motivo seria apenas o valor ou se há outra dúvida sobre a necessidade desses exames?',
+          2500,
+        )
+
+        setTimeout(() => {
+          addMessage({
+            id: (Date.now() + 2).toString(),
+            text: 'É pelo valor mesmo, as coisas estão meio apertadas.',
+            sender: 'user',
+            timestamp: 'Agora',
+            type: 'text',
+          })
+
+          setTimeout(() => {
+            simulateAIResponse(
+              'Entendo totalmente. Pensando no seu bem-estar e para que você não deixe de realizar essa prevenção tão importante, consigo aplicar um desconto especial de 20% exclusivamente nesses exames (PSA Total e PSA Livre).\n\nAlém disso, posso parcelar o valor total do orçamento em até 3x sem juros no cartão.\n\nO que acha dessa facilidade?',
+              3000,
+            )
+
+            setTimeout(() => {
+              addMessage({
+                id: (Date.now() + 3).toString(),
+                text: 'Ah, com desconto e parcelando fica bem mais fácil. Pode incluir sim!',
+                sender: 'user',
+                timestamp: 'Agora',
+                type: 'text',
+              })
+
+              setTimeout(() => {
+                simulateAIResponse(
+                  'Excelente decisão! Priorizar a sua saúde preventiva é fundamental. 💙\n\nO seu orçamento atualizado ficou assim:\n- Hemograma Completo: R$ 45,00\n- PSA Total e PSA Livre (c/ 20% desc.): R$ 72,00\n\nTotal: R$ 117,00 (em até 3x de R$ 39,00 sem juros)\n\nPodemos prosseguir com o agendamento?',
                   3000,
                 )
               }, 3000)
@@ -595,6 +661,13 @@ export default function ChatArea({ className }: { className?: string }) {
           <span className="text-[10px] font-semibold text-muted-foreground uppercase flex items-center mr-1 shrink-0">
             Simular (IA):
           </span>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-blue-500/20 font-medium shrink-0 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
+            onClick={handleSimulatePSA}
+          >
+            <ShieldCheck className="h-3 w-3 mr-1" /> Saúde Masculina (PSA)
+          </Badge>
           <Badge
             variant="secondary"
             className="cursor-pointer hover:bg-emerald-500/20 font-medium shrink-0 bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20"
