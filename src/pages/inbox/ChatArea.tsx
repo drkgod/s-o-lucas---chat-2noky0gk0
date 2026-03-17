@@ -360,7 +360,7 @@ export default function ChatArea({ className }: { className?: string }) {
         })
 
         simulateAIResponse(
-          'Excelente escolha para a sua saúde! Adicionei o Preventivo (Citologia Oncótica) ao seu pedido.\n\nAqui está o seu orçamento atualizado:\n- Hemograma Completo: R$ 45,00\n- Sumário de Urina: R$ 25,00\n- Preventivo (Papanicolau): R$ 80,00\n\nTotal atualizado: R$ 150,00\n\nDeseja agendar o seu atendimento na clínica ou prefere utilizar o nosso serviço de Coleta Domiciliar?',
+          'Excelente escolha para a sua saúde! Adicionei o Preventivo (Citologia Oncótica) ao seu pedido.\n\nAqui está o seu orçamento atualizado:\n- Hemograma Completo: R$ 45,00\n- Sumário de Urina: R$ 25,00\n- Preventivo (Papanicolau): R$ 80,00\n\nTotal atualizado: R$ 150,00\n\nPara garantir a precisão do seu Preventivo (Papanicolau), por favor, siga estas orientações de preparo importantes:\n- Não realizar o exame em período menstrual sendo as melhores datas após o 10º dia do ciclo, ideal 14 15 dia do ciclo.\n- Manter um mínimo de 48h após relação sexual.\n- Não utilizar duchas vaginais, medicação ou cremes nas 48h antes da coleta do exame.\n\nAlém disso, lembre-se das instruções para os exames de Urina que já havíamos conversado.\n\nDeseja agendar o seu atendimento na clínica ou prefere utilizar o nosso serviço de Coleta Domiciliar?',
           2500,
         )
       }, 6000)

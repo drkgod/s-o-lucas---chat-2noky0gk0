@@ -216,6 +216,7 @@ export const mockServices: ServiceItem[] = [
     category: 'exam',
     name: 'Preventivo (Papanicolau / Citologia Oncótica)',
     price: 'R$ 80,00',
-    instructions: 'Abstinência sexual de 48h. Não utilizar cremes vaginais.',
+    instructions:
+      'Não realizar o exame em período menstrual sendo as melhores datas após o 10º dia do ciclo, ideal 14 15 dia do ciclo. Mínimo de 48h após relação sexual. Não utilizar duchas vaginais, medicação ou cremes nas 48h antes da coleta do exame.',
   },
 ]
