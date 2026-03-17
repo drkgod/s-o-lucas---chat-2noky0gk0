@@ -17,6 +17,7 @@ import {
   Stethoscope,
   ShieldCheck,
   Microscope,
+  Award,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -98,6 +99,28 @@ export default function ChatArea({ className }: { className?: string }) {
       type: 'text',
     })
     setInputText('')
+  }
+
+  const handleSimulateCredibility = () => {
+    addMessage({
+      id: Date.now().toString(),
+      text: 'Gostaria de agendar, mas confesso que estou com um pouco de receio. Nunca fiz exames aí e me preocupo muito com a qualidade dos resultados e a segurança...',
+      sender: 'user',
+      timestamp: 'Agora',
+      type: 'text',
+    })
+
+    simulateAIResponse(
+      'Compreendo perfeitamente a sua preocupação. A segurança e a precisão dos seus resultados são a nossa prioridade número um.\n\nPara a sua total tranquilidade, gostaria de compartilhar que nossa equipe é liderada pelo **Dr. Rafael Toledo**, nosso Diretor Técnico. Ele possui mais de 20 anos de experiência e é uma verdadeira referência em todo o Brasil. Além disso, o Dr. Rafael é membro da Sociedade Brasileira de Análises Clínicas (SBAC), da Sociedade Brasileira de Reprodução Assistida (SBRA) e Delegado Regional da Sociedade Brasileira de Citologia Clínica (SBCC) em Alagoas.',
+      3000,
+    )
+
+    setTimeout(() => {
+      simulateAIResponse(
+        'E para garantir o mais alto nível de excelência, nosso laboratório possui a classificação "Padrão Ouro" pelo PNCQ. Pode ter certeza de que você estará em excelentes mãos!\n\nAproveito para convidar você a acompanhar dicas valiosas de saúde no Instagram do nosso diretor: **@rafaeltoledo.laboratorio**.\n\nPodemos seguir com o seu agendamento com total segurança?',
+        4000,
+      )
+    }, 4000)
   }
 
   const handleSimulatePatientText = () => {
@@ -221,8 +244,8 @@ export default function ChatArea({ className }: { className?: string }) {
 
     setTimeout(() => {
       simulateAIResponse(
-        'Para ajudar você a descomplicar de vez esse cuidado com a sua saúde e se sentir ainda mais confiante, o Dr. Rafael Toledo, que também é especialista em citologia clínica, preparou um material educativo exclusivo e gratuito.\n\nAproveite e baixe agora mesmo o e-book "O Seu Preventivo Descomplicado", mesmo que você ainda não agende conosco hoje:',
-        3000,
+        'Para ajudar você a descomplicar de vez esse cuidado com a sua saúde e se sentir ainda mais confiante, nosso Diretor Técnico, **Dr. Rafael Toledo** — que é Delegado Regional da Sociedade Brasileira de Citologia Clínica (SBCC) em Alagoas e possui mais de 20 anos de experiência —, preparou um material educativo exclusivo e gratuito.\n\nAproveite e baixe agora mesmo o e-book "O Seu Preventivo Descomplicado". E não deixe de segui-lo no Instagram em **@rafaeltoledo.laboratorio** para mais conteúdos sobre a saúde da mulher!',
+        3500,
         {
           ebookData: {
             title: 'O Seu Preventivo Descomplicado',
@@ -383,25 +406,25 @@ export default function ChatArea({ className }: { className?: string }) {
     })
 
     simulateAIResponse(
-      'Olá! Parabéns por buscar essa avaliação tão importante para a saúde masculina e reprodutiva. É um passo fundamental para o seu cuidado integral e estamos aqui para te apoiar! 💙\n\nAqui em nossa clínica, o Espermograma é realizado sob a supervisão direta do **Dr. Rafael Toledo**, especialista em infertilidade e reprodução humana. Ele é um verdadeiro expert neste exame, sendo referência em todo o estado de Alagoas e o primeiro biomédico especialista nesta área por aqui!',
+      'Olá! Parabéns por buscar essa avaliação tão importante para a saúde masculina e reprodutiva. É um passo fundamental para o seu cuidado integral e estamos aqui para te apoiar! 💙\n\nAqui em nossa clínica, o Espermograma é realizado sob a supervisão direta do nosso Diretor Técnico, **Dr. Rafael Toledo**. Ele possui mais de 20 anos de experiência, é membro da Sociedade Brasileira de Análises Clínicas (SBAC) e da Sociedade Brasileira de Reprodução Assistida (SBRA). Ele é referência em todo o estado de Alagoas e foi o primeiro biomédico especialista nesta área por aqui!',
       2500,
     )
 
     setTimeout(() => {
       simulateAIResponse(
-        'Para garantir a máxima excelência e precisão dos seus resultados, utilizamos a metodologia de **Morfologia Estrita de Kruger** no processamento do seu exame.\n\nAntes de seguirmos com o agendamento, preciso passar algumas instruções de preparo (pré-analíticas) que são estritamente necessárias para a qualidade da amostra:\n\n1️⃣ **Abstinência Sexual**: É obrigatório manter um período de 2 a 5 dias de abstinência sexual.\n2️⃣ **Coleta**: Você deve coletar o volume total do ejaculado (todos os jatos). É muito importante que nenhum volume do esperma seja perdido durante a coleta.',
-        3000,
+        'Para garantir a máxima excelência e precisão dos seus resultados, utilizamos a avançada metodologia de **Morfologia Estrita de Kruger** no processamento do seu exame.\n\nAntes de seguirmos com o agendamento, preciso passar algumas instruções de preparo (pré-analíticas) estritamente necessárias:\n\n1️⃣ **Abstinência Sexual**: É obrigatório manter um período de 2 a 5 dias de abstinência sexual.\n2️⃣ **Coleta**: Você deve coletar o volume total do ejaculado (todos os jatos). É muito importante que nenhum volume do esperma seja perdido durante a coleta.',
+        3500,
       )
 
       setTimeout(() => {
         simulateAIResponse(
-          'Sobre a entrega do material, oferecemos duas opções para sua maior comodidade:\n\n📍 **No Laboratório**: Em uma sala adequada e preparada.\n🏠 **Em Casa**: Caso prefira, você pode coletar em casa, mas a amostra deve ser entregue no laboratório em no **máximo 30 minutos**.\n⚠️ *Atenção:* Em hipótese alguma refrigere a amostra. Ela deve ser transportada em temperatura ambiente.\n\nPor fim, informo que enviaremos um breve **questionário de anamnese** que deve ser respondido e devolvido ao laboratório junto com a amostra.\n\nQual opção de local para coleta você prefere?',
-          4000,
+          'Sobre a entrega do material, oferecemos duas opções para sua maior comodidade:\n\n📍 **No Laboratório**: Em uma sala adequada e preparada.\n🏠 **Em Casa**: Caso prefira coletar em casa, a amostra deve ser entregue no laboratório em no **máximo 30 minutos**.\n⚠️ *Atenção:* Em hipótese alguma refrigere a amostra. Ela deve ser transportada estritamente em temperatura ambiente.\n\nAh, informo também que enviaremos um breve **questionário de anamnese** que deverá ser respondido e devolvido ao laboratório junto com a amostra.\n\nQual opção de local para coleta você prefere?',
+          4500,
         )
 
         setTimeout(() => {
           simulateAIResponse(
-            'Enquanto você escolhe a melhor opção, preparamos um material educativo exclusivo e gratuito para ajudar você a entender melhor o seu exame, os resultados e o processo.\n\nAproveite e baixe agora mesmo o e-book "Mapa da Fertilidade Masculina", desenvolvido pelo nosso especialista Dr. Rafael Toledo:',
+            'Enquanto você escolhe a melhor opção, preparamos um material educativo exclusivo e gratuito. Aproveite e baixe o e-book "Mapa da Fertilidade Masculina", desenvolvido pelo Dr. Rafael Toledo.\n\nE para acompanhar mais dicas valiosas de saúde e fertilidade, siga-o no Instagram: **@rafaeltoledo.laboratorio**!',
             3000,
             {
               ebookData: {
@@ -414,9 +437,9 @@ export default function ChatArea({ className }: { className?: string }) {
               },
             },
           )
-        }, 8000)
-      }, 6500)
-    }, 6000)
+        }, 8500)
+      }, 7000)
+    }, 6500)
   }
 
   return (
@@ -718,10 +741,10 @@ export default function ChatArea({ className }: { className?: string }) {
           </span>
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-blue-500/20 font-medium shrink-0 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
-            onClick={handleSimulatePSA}
+            className="cursor-pointer hover:bg-amber-500/20 font-medium shrink-0 bg-amber-500/10 text-amber-600 dark:text-amber-400 border-amber-500/20"
+            onClick={handleSimulateCredibility}
           >
-            <ShieldCheck className="h-3 w-3 mr-1" /> Saúde Masculina (PSA)
+            <Award className="h-3 w-3 mr-1" /> Autoridade (Dr. Rafael)
           </Badge>
           <Badge
             variant="secondary"
@@ -736,6 +759,20 @@ export default function ChatArea({ className }: { className?: string }) {
             onClick={handleSimulateConsultativeSales}
           >
             <Stethoscope className="h-3 w-3 mr-1" /> Venda Consultiva
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-blue-500/20 font-medium shrink-0 bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20"
+            onClick={handleSimulatePSA}
+          >
+            <ShieldCheck className="h-3 w-3 mr-1" /> Saúde Masculina (PSA)
+          </Badge>
+          <Badge
+            variant="secondary"
+            className="cursor-pointer hover:bg-pink-500/20 font-medium shrink-0 bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20"
+            onClick={handleSimulateFAQPreventivo}
+          >
+            <BookOpen className="h-3 w-3 mr-1" /> Edu Preventivo
           </Badge>
           <Badge
             variant="secondary"
@@ -764,13 +801,6 @@ export default function ChatArea({ className }: { className?: string }) {
             onClick={handleSimulateRegistration}
           >
             <ClipboardCheck className="h-3 w-3 mr-1" /> Pré-cadastro
-          </Badge>
-          <Badge
-            variant="secondary"
-            className="cursor-pointer hover:bg-pink-500/20 font-medium shrink-0 bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20"
-            onClick={handleSimulateFAQPreventivo}
-          >
-            <BookOpen className="h-3 w-3 mr-1" /> Edu Preventivo
           </Badge>
           <Badge
             variant="secondary"
