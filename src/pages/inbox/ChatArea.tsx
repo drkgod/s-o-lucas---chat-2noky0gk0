@@ -13,6 +13,10 @@ import {
   Clock,
   Droplet,
   Stethoscope,
+  BookOpen,
+  HeartPulse,
+  Download,
+  BellRing,
 } from 'lucide-react'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -20,6 +24,12 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { Switch } from '@/components/ui/switch'
 import { Textarea } from '@/components/ui/textarea'
 import { Badge } from '@/components/ui/badge'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionTrigger,
+  AccordionContent,
+} from '@/components/ui/accordion'
 import useAppStore from '@/stores/useAppStore'
 import { Message } from '@/lib/types'
 import { cn } from '@/lib/utils'
@@ -147,224 +157,90 @@ export default function ChatArea({ className }: { className?: string }) {
       2500,
     )
 
+    // Simulating sequence of registration...
     setTimeout(() => {
       addMessage({
         id: (Date.now() + 1).toString(),
-        text: '',
-        sender: 'user',
-        timestamp: 'Agora',
-        type: 'audio',
-        transcription:
-          'Oi, meu nome é Maria Oliveira, nasci em 12 de maio de 1990, CPF 098.765.432-10. Eu moro na Avenida Paulista, 1000. Plano de saúde.',
-      })
-      setTimeout(() => {
-        addMessage({
-          id: (Date.now() + 2).toString(),
-          text: '',
-          sender: 'user',
-          timestamp: 'Agora',
-          type: 'image',
-          fileUrl: 'https://img.usecurling.com/p/300/200?q=id%20card',
-        })
-        simulateAIResponse(
-          'Obrigado, Maria! Como você escolheu "Plano de Saúde", poderia me informar qual é o nome do seu plano (ex: Unimed, Bradesco, Amil)?\n\nPor favor, envie também uma foto da sua carteirinha física ou um print da carteirinha digital. Fornecer esses documentos nos permite solicitar a autorização prévia junto ao convênio, agilizando muito o seu atendimento!',
-          2500,
-        )
-      }, 1500)
-    }, 7000)
-
-    setTimeout(() => {
-      addMessage({
-        id: (Date.now() + 3).toString(),
         text: 'É Amil.',
         sender: 'user',
         timestamp: 'Agora',
         type: 'text',
       })
       setTimeout(() => {
-        addMessage({
-          id: (Date.now() + 4).toString(),
-          text: '',
-          sender: 'user',
-          timestamp: 'Agora',
-          type: 'image',
-          fileUrl: 'https://img.usecurling.com/p/300/200?q=health%20insurance%20card',
+        simulateAIResponse('Tudo pronto! Confirme os dados do seu pré-cadastro abaixo:', 2500, {
+          type: 'registration_card',
+          registrationData: {
+            name: 'Maria Oliveira',
+            dob: '12/05/1990',
+            cpf: '098.765.432-10',
+            address: 'Avenida Paulista, 1000',
+            coverageType: 'Plano de Saúde',
+            coverageName: 'Amil',
+            idDocumentProvided: true,
+            insuranceCardProvided: true,
+            isDiabetic: false,
+            isHypertensive: false,
+            examReason: 'Check-up',
+          },
         })
-        simulateAIResponse(
-          'Tudo certo! Para finalizar o seu pré-cadastro e fornecer o contexto correto para o laboratório, preciso de algumas informações clínicas rápidas:\n\nÉ diabético?',
-          2500,
-          { options: ['Sim', 'Não'] },
-        )
-
-        setTimeout(() => {
-          addMessage({
-            id: (Date.now() + 5).toString(),
-            text: 'Não',
-            sender: 'user',
-            timestamp: 'Agora',
-            type: 'text',
-          })
-          simulateAIResponse('Entendido. É hipertenso?', 2000, { options: ['Sim', 'Não'] })
-
-          setTimeout(() => {
-            addMessage({
-              id: (Date.now() + 6).toString(),
-              text: 'Não',
-              sender: 'user',
-              timestamp: 'Agora',
-              type: 'text',
-            })
-            simulateAIResponse('Certo. Por fim, qual o motivo da realização dos exames?', 2000, {
-              options: [
-                'Avaliação clínica',
-                'Pré-operatório',
-                'Investigação de alguma doença',
-                'Pré-natal',
-                'Check-up',
-                'Outros',
-              ],
-            })
-
-            setTimeout(() => {
-              addMessage({
-                id: (Date.now() + 7).toString(),
-                text: 'Check-up',
-                sender: 'user',
-                timestamp: 'Agora',
-                type: 'text',
-              })
-
-              simulateAIResponse(
-                'Tudo pronto! Confirme os dados do seu pré-cadastro abaixo:',
-                2500,
-                {
-                  type: 'registration_card',
-                  registrationData: {
-                    name: 'Maria Oliveira',
-                    dob: '12/05/1990',
-                    cpf: '098.765.432-10',
-                    address: 'Avenida Paulista, 1000',
-                    coverageType: 'Plano de Saúde',
-                    coverageName: 'Amil',
-                    idDocumentProvided: true,
-                    insuranceCardProvided: true,
-                    isDiabetic: false,
-                    isHypertensive: false,
-                    examReason: 'Check-up',
-                  },
-                },
-              )
-              setTimeout(() => {
-                setChats((prev) =>
-                  prev.map((c) =>
-                    c.id === chat.id
-                      ? {
-                          ...c,
-                          patientData: {
-                            name: 'Maria Oliveira',
-                            dob: '12/05/1990',
-                            cpf: '098.765.432-10',
-                            address: 'Avenida Paulista, 1000',
-                            coverageType: 'Plano de Saúde',
-                            coverageName: 'Amil',
-                            idDocumentProvided: true,
-                            insuranceCardProvided: true,
-                            isDiabetic: false,
-                            isHypertensive: false,
-                            examReason: 'Check-up',
-                          },
-                        }
-                      : c,
-                  ),
-                )
-              }, 3000)
-            }, 6000)
-          }, 6000)
-        }, 6000)
-      }, 1500)
-    }, 16000)
+      }, 2000)
+    }, 4000)
   }
 
-  const handleSimulateUrineTest = () => {
+  const handleSimulateFAQPreventivo = () => {
     addMessage({
       id: Date.now().toString(),
-      text: 'Preciso fazer um Sumário de Urina e Cultura de Urina. Tem algum preparo?',
+      text: 'Vi que vocês fazem exame preventivo. Tenho algumas dúvidas, nunca fiz e estou um pouco insegura.',
       sender: 'user',
       timestamp: 'Agora',
       type: 'text',
     })
+
     simulateAIResponse(
-      'Olá! Sim, para o Sumário de Urina e a Cultura de Urina, temos algumas instruções importantes para garantir a qualidade "Padrão Ouro" do PNCQ dos nossos resultados:\n\n- Utilizar coletor estéril.\n- Coletar segundo jato de urina após higienizar a região íntima.\n- Secar bem antes de coletar.\n\nInformamos que o laboratório disponibiliza o coletor estéril de forma gratuita! Você pode passar em qualquer uma de nossas unidades para retirar o seu antes da coleta.\n\nDeseja agendar a entrega do material?',
+      'Olá! Seja muito bem-vinda. Sim, realizamos o exame Preventivo (Papanicolau) com muito acolhimento e cuidado.\n\nÉ super normal ter dúvidas, principalmente na primeira vez. Pelo seu perfil, separei algumas das perguntas mais frequentes que recebemos de mulheres sobre este procedimento. Dê uma olhadinha:',
       2500,
-    )
-  }
-
-  const handleSimulateRegistrationDropoff = () => {
-    addMessage({
-      id: Date.now().toString(),
-      text: 'Vamos fechar.',
-      sender: 'user',
-      timestamp: 'Agora',
-      type: 'text',
-    })
-    simulateAIResponse(
-      'Excelente! Para o nosso serviço "Padrão Ouro", me informe para o pré-cadastro:\n1. Nome 2. Data Nasc. 3. CPF 4. Endereço 5. Forma de Atendimento',
-      2000,
-    )
-    setTimeout(() => {
-      simulateAIResponse(
-        'Olá! Percebi que você não concluiu o envio dos dados. Posso ajudar? O pré-cadastro agiliza muito o seu atendimento na clínica! (Acompanhamento 1/12)',
-        5000,
-      )
-      setChats((prev) => prev.map((c) => (c.id === chat.id ? { ...c, followUpStep: 1 } : c)))
-    }, 7000)
-  }
-
-  const handleSimulatePreventive = () => {
-    addMessage({
-      id: Date.now().toString(),
-      text: 'Oi, a médica pediu para eu fazer um Hemograma e um Sumário de Urina.',
-      sender: 'user',
-      timestamp: 'Agora',
-      type: 'text',
-    })
-
-    simulateAIResponse(
-      'Olá! Identifiquei os seus exames: Hemograma Completo (R$ 45,00) e Sumário de Urina (R$ 25,00).\n\nComo parte do nosso cuidado "Padrão Ouro" com a saúde da mulher, notei que não há solicitação para o exame Preventivo (também conhecido como Papanicolau ou Citologia Oncótica).\n\nFaz mais de um ano desde que você realizou seu último exame preventivo?',
-      2500,
-      { options: ['Sim, faz mais de um ano', 'Não, fiz recentemente'] },
+      {
+        faqData: [
+          {
+            question: 'O exame preventivo dói?',
+            answer:
+              'O exame não deve doer. Pode causar um leve desconforto ou pressão, mas é um procedimento rápido. Conversar com o profissional e tentar relaxar a musculatura pélvica ajuda muito!',
+          },
+          {
+            question: 'Qual a importância do exame?',
+            answer:
+              'Ele é o principal método de rastreio e detecção precoce de alterações nas células do colo do útero, prevenindo o desenvolvimento do câncer.',
+          },
+          {
+            question: 'Com que frequência devo realizar?',
+            answer:
+              'Geralmente, anualmente. Após dois exames anuais normais consecutivos, a frequência pode passar para a cada três anos, mas sempre siga a recomendação do seu médico.',
+          },
+        ],
+      },
     )
 
     setTimeout(() => {
-      addMessage({
-        id: (Date.now() + 1).toString(),
-        text: 'Sim, faz mais de um ano',
-        sender: 'user',
-        timestamp: 'Agora',
-        type: 'text',
-      })
-
       simulateAIResponse(
-        'Entendo! O Preventivo é uma medida fundamental para a prevenção do câncer de colo de útero. Aproveitando que você já fará outros exames conosco, gostaria de incluir o Preventivo (Papanicolau) no seu pedido de hoje? Isso ajuda a poupar o seu tempo e garante que seu rastreio de saúde fique em dia!',
-        2500,
-        { options: ['Sim, pode incluir', 'Não, apenas os que a médica pediu'] },
+        'Para ajudar você a descomplicar de vez esse cuidado com a sua saúde e se sentir ainda mais confiante, nós preparamos um material educativo exclusivo e gratuito.\n\nAproveite e baixe agora mesmo, mesmo que você ainda não agende conosco hoje:',
+        3000,
+        {
+          ebookData: {
+            title: 'Seu exame preventivo descomplicado',
+            author: 'Dr. Rafael Toledo',
+            coverUrl:
+              'https://img.usecurling.com/p/200/300?q=female%20health%20book%20cover&color=pink',
+          },
+        },
       )
+    }, 8000)
+  }
 
-      setTimeout(() => {
-        addMessage({
-          id: (Date.now() + 2).toString(),
-          text: 'Sim, pode incluir',
-          sender: 'user',
-          timestamp: 'Agora',
-          type: 'text',
-        })
-
-        simulateAIResponse(
-          'Excelente escolha para a sua saúde! Adicionei o Preventivo (Citologia Oncótica) ao seu pedido.\n\nAqui está o seu orçamento atualizado:\n- Hemograma Completo: R$ 45,00\n- Sumário de Urina: R$ 25,00\n- Preventivo (Papanicolau): R$ 80,00\n\nTotal atualizado: R$ 150,00\n\nPara garantir a precisão do seu Preventivo (Papanicolau), por favor, siga estas orientações de preparo importantes:\n- Não realizar o exame em período menstrual sendo as melhores datas após o 10º dia do ciclo, ideal 14 15 dia do ciclo.\n- Manter um mínimo de 48h após relação sexual.\n- Não utilizar duchas vaginais, medicação ou cremes nas 48h antes da coleta do exame.\n\nAlém disso, lembre-se das instruções para os exames de Urina que já havíamos conversado.\n\nDeseja agendar o seu atendimento na clínica ou prefere utilizar o nosso serviço de Coleta Domiciliar?',
-          2500,
-        )
-      }, 6000)
-    }, 6000)
+  const handleSimulateLembrete72h = () => {
+    simulateAIResponse(
+      'Olá! 🌸 \n\nLembrete Automático: O seu exame Preventivo (Papanicolau) está agendado para daqui a exatamente 72 horas.\n\nPara garantir a precisão dos seus resultados e evitar a necessidade de recoleta, é **fundamental** que você siga rigorosamente estas 3 instruções de preparo a partir de hoje:\n\n1️⃣ **Ciclo Menstrual**: Não realizar o exame em período menstrual (lembrando que as melhores datas são após o 10º dia do ciclo, sendo o ideal no 14º ou 15º dia).\n2️⃣ **Abstinência**: Mantenha um mínimo de 48 horas de abstinência sexual prévia à coleta.\n3️⃣ **Produtos Vaginais**: Não utilizar duchas vaginais, medicações locais ou cremes nas 48 horas anteriores à coleta do exame.\n\nSe tiver qualquer dúvida sobre o preparo ou precisar reagendar, basta me avisar por aqui!',
+      1000,
+    )
   }
 
   return (
@@ -504,9 +380,11 @@ export default function ChatArea({ className }: { className?: string }) {
                       />
                     </div>
                   )}
+
                   {!isAudio && !isDocument && !isImage && !isRegistrationCard && (
                     <span className="whitespace-pre-wrap">{m.text}</span>
                   )}
+
                   {m.options && m.options.length > 0 && (
                     <div className="mt-3 flex flex-col gap-1.5 w-full">
                       {m.options.map((opt, i) => (
@@ -520,6 +398,66 @@ export default function ChatArea({ className }: { className?: string }) {
                     </div>
                   )}
 
+                  {m.faqData && m.faqData.length > 0 && (
+                    <div className="mt-4 w-full min-w-[280px]">
+                      <h4 className="text-[11px] font-bold uppercase mb-2 flex items-center gap-1.5 opacity-70 text-foreground">
+                        <HeartPulse className="h-3.5 w-3.5" /> FAQ - Saúde da Mulher
+                      </h4>
+                      <Accordion
+                        type="single"
+                        collapsible
+                        className="w-full bg-background rounded-md border text-left overflow-hidden shadow-sm"
+                      >
+                        {m.faqData.map((faq, i) => (
+                          <AccordionItem
+                            key={i}
+                            value={`item-${i}`}
+                            className="border-b last:border-0 border-border/50"
+                          >
+                            <AccordionTrigger className="text-[13px] font-medium py-2.5 px-3 hover:bg-muted/50 text-foreground transition-colors text-left data-[state=open]:bg-muted/50">
+                              {faq.question}
+                            </AccordionTrigger>
+                            <AccordionContent className="text-[12px] text-muted-foreground px-3 pb-3 pt-1">
+                              {faq.answer}
+                            </AccordionContent>
+                          </AccordionItem>
+                        ))}
+                      </Accordion>
+                    </div>
+                  )}
+
+                  {m.ebookData && (
+                    <div className="mt-4 flex items-center gap-3 bg-background p-3 rounded-xl border border-border/50 shadow-sm w-full min-w-[260px] text-foreground">
+                      <div className="h-[72px] w-[52px] bg-primary/10 rounded overflow-hidden shrink-0 border border-primary/20 relative">
+                        {m.ebookData.coverUrl ? (
+                          <img
+                            src={m.ebookData.coverUrl}
+                            className="absolute inset-0 object-cover h-full w-full"
+                            alt="Capa E-book"
+                          />
+                        ) : (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <BookOpen className="h-6 w-6 text-primary" />
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex flex-col flex-1 py-0.5">
+                        <span className="text-[13px] font-bold leading-tight line-clamp-2 text-foreground/90">
+                          {m.ebookData.title}
+                        </span>
+                        <span className="text-[10px] text-muted-foreground mt-1 mb-2 font-medium">
+                          Por {m.ebookData.author}
+                        </span>
+                        <Button
+                          size="sm"
+                          className="h-7 text-[11px] px-3 w-full justify-start gap-2 bg-pink-500/10 text-pink-600 hover:bg-pink-500/20 hover:text-pink-700 dark:bg-pink-500/20 dark:text-pink-400 dark:hover:bg-pink-500/30 border-0 shadow-none"
+                        >
+                          <Download className="h-3.5 w-3.5" /> Acessar E-book
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+
                   {isRegistrationCard && m.registrationData && (
                     <div className="mt-3 flex flex-col gap-2 bg-background p-3 rounded-lg border border-border/50 shadow-sm text-sm w-full min-w-[260px]">
                       <div className="flex items-center gap-2 mb-1 border-b pb-2">
@@ -528,7 +466,7 @@ export default function ChatArea({ className }: { className?: string }) {
                           Pré-cadastro Preenchido
                         </span>
                       </div>
-                      <div className="grid grid-cols-1 gap-1.5 text-xs mt-1">
+                      <div className="grid grid-cols-1 gap-1.5 text-xs mt-1 text-foreground">
                         <div className="flex flex-col">
                           <span className="text-muted-foreground text-[10px] uppercase font-semibold">
                             Nome Completo
@@ -547,60 +485,6 @@ export default function ChatArea({ className }: { className?: string }) {
                           </span>
                           <span className="font-medium">{m.registrationData.cpf}</span>
                         </div>
-                        <div className="flex flex-col">
-                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                            Endereço
-                          </span>
-                          <span className="font-medium">{m.registrationData.address}</span>
-                        </div>
-                        <div className="flex flex-col">
-                          <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                            Tipo de Cobertura
-                          </span>
-                          <span className="font-medium">
-                            {m.registrationData.coverageType}{' '}
-                            {m.registrationData.coverageName
-                              ? `- ${m.registrationData.coverageName}`
-                              : ''}
-                          </span>
-                        </div>
-                        {(m.registrationData.isDiabetic !== undefined ||
-                          m.registrationData.examReason) && (
-                          <>
-                            <div className="flex flex-col mt-1">
-                              <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                                Perfil Clínico
-                              </span>
-                              <span className="font-medium">
-                                {m.registrationData.isDiabetic ? 'Diabético' : 'Não Diabético'} •{' '}
-                                {m.registrationData.isHypertensive
-                                  ? 'Hipertenso'
-                                  : 'Não Hipertenso'}
-                              </span>
-                            </div>
-                            <div className="flex flex-col">
-                              <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                                Motivo dos Exames
-                              </span>
-                              <span className="font-medium">{m.registrationData.examReason}</span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      <div className="mt-2 pt-2 border-t flex justify-end gap-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          className="h-7 text-xs px-2 pointer-events-none"
-                        >
-                          Editar Dados
-                        </Button>
-                        <Button
-                          size="sm"
-                          className="h-7 text-xs px-2 bg-primary text-primary-foreground pointer-events-none"
-                        >
-                          Confirmar
-                        </Button>
                       </div>
                     </div>
                   )}
@@ -679,24 +563,17 @@ export default function ChatArea({ className }: { className?: string }) {
           </Badge>
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
-            onClick={handleSimulateUrineTest}
+            className="cursor-pointer hover:bg-pink-500/20 font-medium shrink-0 bg-pink-500/10 text-pink-600 dark:text-pink-400 border-pink-500/20"
+            onClick={handleSimulateFAQPreventivo}
           >
-            <Droplet className="h-3 w-3 mr-1" /> Exame de Urina
+            <BookOpen className="h-3 w-3 mr-1" /> Edu Preventivo
           </Badge>
           <Badge
             variant="secondary"
-            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
-            onClick={handleSimulatePreventive}
+            className="cursor-pointer hover:bg-orange-500/20 font-medium shrink-0 bg-orange-500/10 text-orange-600 dark:text-orange-400 border-orange-500/20"
+            onClick={handleSimulateLembrete72h}
           >
-            <Stethoscope className="h-3 w-3 mr-1" /> Upsell Preventivo
-          </Badge>
-          <Badge
-            variant="secondary"
-            className="cursor-pointer hover:bg-secondary/80 font-normal shrink-0 bg-primary/10 text-primary border-primary/20"
-            onClick={handleSimulateRegistrationDropoff}
-          >
-            <Clock className="h-3 w-3 mr-1" /> Abandono Cad.
+            <BellRing className="h-3 w-3 mr-1" /> Lembrete 72h
           </Badge>
         </div>
       </div>

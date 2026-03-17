@@ -1,6 +1,13 @@
 export type Platform = 'whatsapp' | 'instagram'
 
-export type MessageType = 'text' | 'audio' | 'document' | 'image' | 'registration_card'
+export type MessageType =
+  | 'text'
+  | 'audio'
+  | 'document'
+  | 'image'
+  | 'registration_card'
+  | 'faq'
+  | 'ebook'
 
 export interface RegistrationData {
   name?: string
@@ -16,6 +23,18 @@ export interface RegistrationData {
   examReason?: string
 }
 
+export interface FaqItem {
+  question: string
+  answer: string
+}
+
+export interface EbookData {
+  title: string
+  author: string
+  coverUrl?: string
+  downloadUrl?: string
+}
+
 export interface Message {
   id: string
   text: string
@@ -26,6 +45,8 @@ export interface Message {
   transcription?: string
   registrationData?: RegistrationData
   options?: string[]
+  faqData?: FaqItem[]
+  ebookData?: EbookData
 }
 
 export interface Chat {
