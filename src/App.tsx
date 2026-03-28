@@ -1,33 +1,47 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Toaster } from '@/components/ui/toaster'
-import { Toaster as Sonner } from '@/components/ui/sonner'
-import { TooltipProvider } from '@/components/ui/tooltip'
-import Layout from './components/Layout'
-import Index from './pages/Index'
-import Inbox from './pages/Inbox'
-import Services from './pages/Services'
-import Configuration from './pages/Configuration'
-import NotFound from './pages/NotFound'
-import { AppProvider } from './stores/useAppStore'
+import { BrowserRouter, Routes, Route, Outlet } from 'react-router-dom'
+import { ThemeProvider } from 'next-themes'
+import { SidebarProvider } from '@/components/ui/sidebar'
+import { Toaster } from '@/components/ui/sonner'
+import AppSidebar from '@/components/AppSidebar'
+import Header from '@/components/Header'
+import Index from '@/pages/Index'
+import Configuration from '@/pages/Configuration'
+import ChatArea from '@/pages/inbox/ChatArea'
+import NotFound from '@/pages/NotFound'
 
-const App = () => (
-  <BrowserRouter future={{ v7_startTransition: false, v7_relativeSplatPath: false }}>
-    <AppProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
+function AppLayout() {
+  return (
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-background overflow-hidden">
+        <AppSidebar />
+        <div className="flex flex-col flex-1 w-full min-w-0">
+          <Header />
+          <main className="flex-1 overflow-hidden relative">
+            <Outlet />
+          </main>
+        </div>
+      </div>
+    </SidebarProvider>
+  )
+}
+
+export default function App() {
+  return (
+    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+      <BrowserRouter>
         <Routes>
-          <Route element={<Layout />}>
-            <Route path="/" element={<Index />} />
-            <Route path="/inbox" element={<Inbox />} />
-            <Route path="/servicos" element={<Services />} />
-            <Route path="/configuracao" element={<Configuration />} />
-          </Route>
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </TooltipProvider>
-    </AppProvider>
-  </BrowserRouter>
-)
+          {/* Landing / Login Route */}
+          <Route path="/" element={<Index />} />
 
-export default App
+          {/* Main App Routes with Sidebar & Header */}
+          <Route element={<AppLayout />}>
+            <Route path="/inbox" element={<ChatArea />} />
+            <Route path="/configuracao" element={<Configuration />} />
+            <Route path="*" element={<NotFound />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
+      <Toaster />
+    </ThemeProvider>
+  )
+}

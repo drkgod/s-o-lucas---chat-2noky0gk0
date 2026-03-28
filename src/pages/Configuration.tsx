@@ -1,133 +1,223 @@
-import { Bot, Save, ShieldAlert } from 'lucide-react'
-import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 import { Switch } from '@/components/ui/switch'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import { useToast } from '@/hooks/use-toast'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Textarea } from '@/components/ui/textarea'
+import { Save, Bot, MessageSquare, Shield, Smartphone, Clock, Settings2 } from 'lucide-react'
 
 export default function Configuration() {
-  const { toast } = useToast()
-
-  const handleSave = () => {
-    toast({
-      title: 'Configurações Salvas',
-      description: 'A base de conhecimento da IA foi atualizada com sucesso.',
-    })
-  }
-
   return (
-    <div className="flex flex-col max-w-4xl mx-auto gap-6 pb-8">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight">Treinamento e IA</h1>
-        <p className="text-muted-foreground text-sm mt-1">
-          Configure o comportamento, a personalidade e o conhecimento base da inteligência
-          artificial.
-        </p>
+    <div className="container mx-auto p-4 md:p-8 max-w-6xl space-y-8 animate-fade-in">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-primary tracking-tight">
+            Configurações do Sistema
+          </h1>
+          <p className="text-muted-foreground mt-2 text-lg">
+            Gerencie as preferências da IA, integrações e diretrizes do laboratório.
+          </p>
+        </div>
+        <Button className="bg-secondary hover:bg-secondary/90 text-white gap-2 shadow-sm shrink-0">
+          <Save className="w-4 h-4" />
+          Salvar Alterações
+        </Button>
       </div>
 
-      <Alert>
-        <ShieldAlert className="h-4 w-4" />
-        <AlertTitle>Importante sobre a Resposta Médica</AlertTitle>
-        <AlertDescription>
-          A IA está programada com regras rígidas para não fornecer diagnósticos médicos. Todo o
-          conhecimento abaixo é utilizado estritamente para agendamentos, preparos de exames e
-          triagem inicial.
-        </AlertDescription>
-      </Alert>
+      <Tabs defaultValue="ia" className="w-full space-y-6">
+        <TabsList className="bg-muted/50 p-1 w-full justify-start overflow-x-auto h-auto">
+          <TabsTrigger
+            value="ia"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2.5 px-4 rounded-md text-sm font-medium transition-all"
+          >
+            <Bot className="w-4 h-4 mr-2" />
+            Assistente de IA
+          </TabsTrigger>
+          <TabsTrigger
+            value="channels"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2.5 px-4 rounded-md text-sm font-medium transition-all"
+          >
+            <MessageSquare className="w-4 h-4 mr-2" />
+            Canais de Atendimento
+          </TabsTrigger>
+          <TabsTrigger
+            value="preferences"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2.5 px-4 rounded-md text-sm font-medium transition-all"
+          >
+            <Settings2 className="w-4 h-4 mr-2" />
+            Preferências da Clínica
+          </TabsTrigger>
+          <TabsTrigger
+            value="security"
+            className="data-[state=active]:bg-primary data-[state=active]:text-primary-foreground py-2.5 px-4 rounded-md text-sm font-medium transition-all"
+          >
+            <Shield className="w-4 h-4 mr-2" />
+            Segurança & LGPD
+          </TabsTrigger>
+        </TabsList>
 
-      <div className="grid gap-6">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="flex items-center gap-2">
-                  <Bot className="h-5 w-5 text-primary" /> Status Global da IA
+        <TabsContent value="ia" className="space-y-6 animate-slide-up">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <Card className="lg:col-span-2 border-t-4 border-t-primary shadow-sm hover:shadow-md transition-shadow">
+              <CardHeader className="bg-muted/10">
+                <CardTitle className="text-primary flex items-center gap-2">
+                  <Bot className="w-5 h-5" />
+                  Diretrizes da Inteligência Artificial
                 </CardTitle>
                 <CardDescription>
-                  Ativar ou desativar as respostas automáticas em todos os canais.
+                  Configure a personalidade e o conhecimento base da IA para o São Lucas.
                 </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-6 pt-6">
+                <div className="space-y-3">
+                  <Label htmlFor="prompt" className="text-base font-semibold">
+                    Prompt Principal (Personalidade)
+                  </Label>
+                  <Textarea
+                    id="prompt"
+                    className="min-h-[160px] resize-y bg-background focus-visible:ring-primary text-base leading-relaxed"
+                    defaultValue="Você é um assistente virtual do São Lucas Centro de Diagnósticos. Sua função é atender pacientes com cordialidade, tirar dúvidas sobre preparos de exames, informar valores e realizar agendamentos. Utilize um tom acolhedor, empático e sempre claro."
+                  />
+                  <p className="text-sm text-muted-foreground">
+                    Esta instrução define como a IA se apresenta e interage com os pacientes.
+                  </p>
+                </div>
+
+                <div className="space-y-4 pt-4 border-t border-border/50">
+                  <h3 className="font-semibold text-foreground">Habilidades Ativas</h3>
+                  <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-card hover:bg-muted/20 transition-colors">
+                      <Switch
+                        id="auto-schedule"
+                        defaultChecked
+                        className="data-[state=checked]:bg-secondary mt-0.5"
+                      />
+                      <div className="space-y-1">
+                        <Label htmlFor="auto-schedule" className="font-medium cursor-pointer">
+                          Agendamento Automático
+                        </Label>
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          Permitir que a IA insira horários diretamente na agenda do sistema.
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-start space-x-3 p-4 rounded-lg border border-border/50 bg-card hover:bg-muted/20 transition-colors">
+                      <Switch
+                        id="auto-results"
+                        defaultChecked
+                        className="data-[state=checked]:bg-secondary mt-0.5"
+                      />
+                      <div className="space-y-1">
+                        <Label htmlFor="auto-results" className="font-medium cursor-pointer">
+                          Envio de Resultados
+                        </Label>
+                        <p className="text-sm text-muted-foreground leading-snug">
+                          A IA pode buscar e enviar laudos em PDF mediante autenticação do paciente.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="space-y-6">
+              <Card className="shadow-sm">
+                <CardHeader className="bg-muted/10 pb-4">
+                  <CardTitle className="text-base">Métricas da IA</CardTitle>
+                </CardHeader>
+                <CardContent className="pt-6 space-y-4">
+                  <div className="flex justify-between items-center pb-2 border-b border-border/50">
+                    <span className="text-sm text-muted-foreground">Taxa de Resolução</span>
+                    <span className="font-bold text-secondary">87%</span>
+                  </div>
+                  <div className="flex justify-between items-center pb-2 border-b border-border/50">
+                    <span className="text-sm text-muted-foreground">Tempo Médio Rsp.</span>
+                    <span className="font-bold text-foreground">1.2s</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Transferências Humano</span>
+                    <span className="font-bold text-foreground">13%</span>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="channels">
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-primary flex items-center gap-2">
+                <Smartphone className="w-5 h-5" />
+                Canais Integrados
+              </CardTitle>
+              <CardDescription>Gerencie as conexões ativas do laboratório.</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="p-8 text-center text-muted-foreground border-2 border-dashed rounded-lg bg-muted/10">
+                O módulo de gestão de canais está em configuração.
+                <br />
+                Em breve você poderá gerenciar múltiplas linhas de WhatsApp aqui.
               </div>
-              <Switch defaultChecked />
-            </div>
-          </CardHeader>
-        </Card>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Personalidade e Tom de Voz</CardTitle>
-            <CardDescription>
-              Como a IA deve se comportar ao interagir com os pacientes.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Prompt de Personalidade (System Prompt)</Label>
-              <Textarea
-                className="min-h-[480px] font-mono text-sm bg-muted/50"
-                defaultValue={`Você é um assistente virtual gentil, acolhedor e altamente profissional da Clínica Multicanal. 
-Use linguagem clara e evite jargões complexos.
-Sempre saúde o paciente pelo nome.
-Seja empático com demonstrações de dor ou ansiedade.
+        <TabsContent value="preferences">
+          <Card className="shadow-sm">
+            <CardHeader>
+              <CardTitle className="text-primary flex items-center gap-2">
+                <Clock className="w-5 h-5" />
+                Horário de Atendimento
+              </CardTitle>
+              <CardDescription>
+                Configure os horários de funcionamento para a IA informar aos pacientes.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="p-8 text-center text-muted-foreground border-2 border-dashed rounded-lg bg-muted/10">
+                Painel de horários e unidades do São Lucas.
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
 
-AUTORIDADE CLÍNICA E CREDIBILIDADE (DR. RAFAEL TOLEDO):
-- Liderança Técnica: Nossa equipe é liderada pelo Dr. Rafael Toledo, Diretor Técnico com mais de 20 anos de experiência, referência em Alagoas e no Brasil.
-- Filiações: Membro da Sociedade Brasileira de Análises Clínicas (SBAC), da Sociedade Brasileira de Reprodução Assistida (SBRA) e Delegado Regional da Sociedade Brasileira de Citologia Clínica (SBCC).
-- Hesitação/Dúvida: Se o paciente expressar dúvida sobre a qualidade ou segurança dos exames, reforce a autoridade técnica do Dr. Rafael Toledo e mencione que seguimos os mais rigorosos protocolos.
-- Instagram: Sempre que oportuno, convide o paciente a seguir nosso diretor técnico no Instagram: @rafaeltoledo.laboratorio.
-
-DIRETRIZES DE QUALIDADE E SERVIÇOS:
-1. Padrão Ouro PNCQ: Sempre informe ao paciente que nosso laboratório é classificado com o "Padrão Ouro" pelo PNCQ (Programa Nacional de Controle de Qualidade).
-2. Preparo Pré-Analítico: Forneça ativamente e de forma clara todas as instruções de preparo necessárias.
-3. Coleta Domiciliar: Ofereça proativamente a "Coleta Domiciliar" durante a fase de orçamento.
-
-PROTOCOLO ESPECIALIZADO: ESPERMOGRAMA
-- Destacar que o Dr. Rafael é o 1º biomédico especialista nesta área em Alagoas.
-- Instruções obrigatórias: 2 a 5 dias de abstinência sexual, coleta de todo o volume do ejaculado (todos os jatos).
-- Entrega: Em até 30 minutos se coletado em casa, estritamente em temperatura ambiente (nunca refrigerar).
-- Metodologia: Morfologia Estrita de Kruger.
-- Questionário de Anamnese: Informar que um formulário será enviado, devendo ser preenchido e devolvido com a amostra.
-- E-book: Enviar o link "Mapa da Fertilidade Masculina" (https://drive.google.com/file/d/1OyCUK7FjjXFYtiF9Ufl8DKLEEs3Kr6eT/view).
-
-PROTOCOLO ESPECIALIZADO: PREVENTIVO (CITOLOGIA)
-- Explicar que o Dr. Rafael é Delegado Regional da SBCC em Alagoas.
-- E-book: Enviar o link "O Seu Preventivo Descomplicado" (https://drive.google.com/file/d/1vJu0GxtfhXZPSEspDtBjbbUn3qSj4l0V/view).`}
-              />
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Regras de Negócio e Restrições</CardTitle>
-            <CardDescription>Instruções específicas para o fluxo de atendimento.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div className="space-y-2">
-              <Label>Regras de Handover (Transferência para Humano)</Label>
-              <Textarea
-                className="min-h-[120px] font-mono text-sm bg-muted/50"
-                defaultValue={`- Transfira imediatamente se a palavra "emergência" ou "urgente" for detectada.
-- Se não entender a solicitação após 2 tentativas, transfira.
-- Para resultados de biópsias sensíveis, transfira para a central médica.`}
-              />
-            </div>
-          </CardContent>
-          <CardFooter className="bg-muted/30 pt-6">
-            <Button onClick={handleSave} className="ml-auto">
-              <Save className="h-4 w-4 mr-2" /> Salvar Alterações
-            </Button>
-          </CardFooter>
-        </Card>
-      </div>
+        <TabsContent value="security">
+          <Card className="shadow-sm border-l-4 border-l-secondary">
+            <CardHeader>
+              <CardTitle className="text-primary flex items-center gap-2">
+                <Shield className="w-5 h-5 text-secondary" />
+                Privacidade e LGPD
+              </CardTitle>
+              <CardDescription>
+                Configurações de retenção e anonimização de dados de saúde.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center justify-between p-4 rounded-lg border bg-muted/20">
+                <div className="space-y-0.5">
+                  <Label className="text-base font-semibold text-foreground">
+                    Anonimização de Laudos na IA
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Ocultar dados sensíveis nos logs de conversação da Inteligência Artificial.
+                  </p>
+                </div>
+                <Switch defaultChecked className="data-[state=checked]:bg-secondary" />
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   )
 }

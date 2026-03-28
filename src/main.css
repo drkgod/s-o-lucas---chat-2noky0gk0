@@ -1,166 +1,126 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 @layer base {
   :root {
-    --background: 210 40% 98%; /* #f8fafc */
-    --foreground: 222.2 84% 4.9%;
+    --background: 0 0% 100%;
+    /* Dark blueish grey instead of pure black for better brand alignment */
+    --foreground: 214 40% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 214 40% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 214 40% 15%;
 
-    --primary: 200 98% 39%; /* #0284c7 - Clinic Blue */
-    --primary-foreground: 210 40% 98%;
+    /* Brand Blue: The deep blue shade from the shield (#1c4d8c) */
+    --primary: 214 67% 33%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 173 80% 40%; /* #14b8a6 - Teal */
+    /* Brand Green: The vibrant green from the shield (#129345) */
+    --secondary: 144 78% 32%;
     --secondary-foreground: 0 0% 100%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Brand Gray: Used for muted backgrounds and borders */
+    --muted: 210 10% 96%;
+    /* Brand Gray text: from "Centro de Diagnósticos" (#808285) */
+    --muted-foreground: 210 2% 51%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 84% 4.9%;
+    --accent: 210 10% 96%;
+    --accent-foreground: 214 67% 33%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 200 98% 39%;
+    --border: 210 10% 90%;
+    --input: 210 10% 90%;
 
-    --radius: 0.75rem;
+    /* Focus rings use Brand Blue */
+    --ring: 214 67% 33%;
 
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222.2 84% 4.9%;
-    --sidebar-primary: 200 98% 39%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 96.1%;
-    --sidebar-accent-foreground: 222.2 84% 4.9%;
-    --sidebar-border: 214.3 31.8% 91.4%;
-    --sidebar-ring: 200 98% 39%;
+    --radius: 0.5rem;
 
-    --chart-1: 200 98% 39%;
-    --chart-2: 173 80% 40%;
-    --chart-3: 280 65% 60%;
-    --chart-4: 43 100% 60%;
-    --chart-5: 0 84% 60%;
+    --chart-1: 214 67% 33%; /* Brand Blue */
+    --chart-2: 144 78% 32%; /* Brand Green */
+    --chart-3: 210 2% 51%; /* Brand Gray */
+    --chart-4: 199 89% 48%; /* Accent Cyan */
+    --chart-5: 43 74% 66%; /* Accent Yellow */
   }
 
   .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 200 98% 39%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 173 80% 40%;
+    --background: 214 40% 8%;
+    --foreground: 0 0% 98%;
+
+    --card: 214 40% 12%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 214 40% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Slightly lighter Blue for dark mode contrast */
+    --primary: 214 67% 55%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Slightly lighter Green for dark mode contrast */
+    --secondary: 144 78% 45%;
     --secondary-foreground: 0 0% 100%;
-    --muted: 222.2 84% 10%;
-    --muted-foreground: 215.4 16.3% 60%;
-    --accent: 222.2 84% 10%;
-    --accent-foreground: 210 40% 98%;
+
+    --muted: 214 20% 18%;
+    --muted-foreground: 210 2% 65%;
+
+    --accent: 214 20% 18%;
+    --accent-foreground: 214 67% 55%;
+
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 222.2 84% 14.9%;
-    --input: 222.2 84% 14.9%;
-    --ring: 200 98% 39%;
-    --sidebar-background: 222.2 84% 4.9%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 200 98% 39%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222.2 84% 10%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 222.2 84% 14.9%;
-    --sidebar-ring: 200 98% 39%;
-  }
+    --destructive-foreground: 0 0% 98%;
 
-  body {
-    font-family: 'Inter', sans-serif;
-  }
+    --border: 214 20% 20%;
+    --input: 214 20% 20%;
+    --ring: 214 67% 55%;
 
-  section[aria-label='Notifications alt+T'] {
-    padding: 0 !important;
-    margin: 0 !important;
+    --chart-1: 214 67% 55%;
+    --chart-2: 144 78% 45%;
+    --chart-3: 210 2% 65%;
+    --chart-4: 199 89% 55%;
+    --chart-5: 43 74% 50%;
   }
 }
 
-@layer utilities {
-  .text-whatsapp {
-    color: #25d366;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-  .bg-whatsapp {
-    background-color: #25d366;
+  body {
+    @apply bg-background text-foreground;
   }
-  .text-instagram {
-    color: #e1306c;
-  }
-  .bg-instagram-gradient {
-    background: linear-gradient(
-      45deg,
-      #f09433 0%,
-      #e6683c 25%,
-      #dc2743 50%,
-      #cc2366 75%,
-      #bc1888 100%
-    );
-  }
+}
 
-  .typing-dot {
-    animation: typing 1.4s infinite ease-in-out both;
-  }
-  .typing-dot:nth-child(1) {
-    animation-delay: -0.32s;
-  }
-  .typing-dot:nth-child(2) {
-    animation-delay: -0.16s;
-  }
+/* Custom Utilities for Micro-interactions */
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out forwards;
+}
 
-  @keyframes typing {
-    0%,
-    80%,
-    100% {
-      transform: scale(0);
-    }
-    40% {
-      transform: scale(1);
-    }
-  }
+.animate-slide-up {
+  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
 
-  @keyframes pulse-ring {
-    0% {
-      transform: scale(0.8);
-      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7);
-    }
-    70% {
-      transform: scale(1);
-      box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
-    }
-    100% {
-      transform: scale(0.8);
-      box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
-    }
+@keyframes fade-in {
+  from {
+    opacity: 0;
   }
-  .animate-pulse-ring {
-    animation: pulse-ring 2s infinite;
+  to {
+    opacity: 1;
   }
+}
 
-  @keyframes fade-in {
-    from {
-      opacity: 0;
-    }
-    to {
-      opacity: 1;
-    }
+@keyframes slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  .animate-fade-in {
-    animation: fade-in 0.3s ease-out forwards;
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

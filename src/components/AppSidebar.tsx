@@ -1,83 +1,100 @@
 import { Link, useLocation } from 'react-router-dom'
-import { Activity, MessageSquare, Settings, BookOpen, Stethoscope } from 'lucide-react'
+import { MessageSquare, Settings, Users, Activity, FileText, HelpCircle } from 'lucide-react'
 import {
   Sidebar,
   SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
+  SidebarFooter,
 } from '@/components/ui/sidebar'
-import useAppStore from '@/stores/useAppStore'
-import { cn } from '@/lib/utils'
+import logoUrl from '@/assets/logo-02-4a0a7.png'
+
+const menuItems = [
+  { title: 'Atendimentos', url: '/inbox', icon: MessageSquare },
+  { title: 'Pacientes', url: '/pacientes', icon: Users },
+  { title: 'Exames', url: '/exames', icon: Activity },
+  { title: 'Relatórios', url: '/relatorios', icon: FileText },
+  { title: 'Configuração', url: '/configuracao', icon: Settings },
+]
 
 export default function AppSidebar() {
   const location = useLocation()
-  const { hasAlert } = useAppStore()
-
-  const navItems = [
-    { title: 'Dashboard', url: '/', icon: Activity },
-    { title: 'Inbox Central', url: '/inbox', icon: MessageSquare, alert: hasAlert },
-    { title: 'Catálogo de Serviços', url: '/servicos', icon: Stethoscope },
-    { title: 'Treinamento IA', url: '/configuracao', icon: BookOpen },
-  ]
 
   return (
-    <Sidebar variant="sidebar" className="border-r border-border">
-      <SidebarHeader className="flex h-16 items-center justify-center border-b px-4">
-        <div className="flex items-center gap-2 font-semibold text-primary">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Activity className="h-5 w-5" />
-          </div>
-          <span className="text-lg tracking-tight truncate">Clínica IA</span>
-        </div>
+    <Sidebar className="border-r border-border/50 bg-card">
+      <SidebarHeader className="border-b border-border/50 p-4 min-h-[4rem] flex items-center justify-center">
+        <Link
+          to="/"
+          className="flex items-center justify-center w-full transition-transform duration-300 hover:scale-[1.02]"
+        >
+          <img
+            src={logoUrl}
+            alt="São Lucas Centro de Diagnósticos"
+            className="h-10 w-auto object-contain"
+          />
+        </Link>
       </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={location.pathname === item.url}
-                    tooltip={item.title}
-                  >
-                    <Link to={item.url} className="flex items-center gap-3">
-                      <item.icon
-                        className={cn('h-4 w-4', item.alert && 'text-destructive animate-pulse')}
-                      />
-                      <span>{item.title}</span>
-                      {item.alert && (
-                        <div className="ml-auto h-2 w-2 rounded-full bg-destructive animate-pulse-ring" />
-                      )}
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
 
-        <SidebarGroup className="mt-auto">
+      <SidebarContent className="py-4">
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-muted-foreground font-medium text-xs uppercase tracking-wider mb-2 px-4">
+            Menu Principal
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild tooltip="Ajustes do Sistema">
-                  <a href="#" className="flex items-center gap-3 text-muted-foreground">
-                    <Settings className="h-4 w-4" />
-                    <span>Ajustes do Sistema</span>
-                  </a>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
+              {menuItems.map((item) => {
+                const isActive = location.pathname.startsWith(item.url)
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={isActive}
+                      tooltip={item.title}
+                      className={`transition-all duration-200 ${
+                        isActive
+                          ? 'bg-primary/10 text-primary hover:bg-primary/15'
+                          : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      }`}
+                    >
+                      <Link to={item.url} className="flex items-center gap-3">
+                        <item.icon
+                          className={`h-5 w-5 transition-colors ${isActive ? 'text-primary' : 'text-muted-foreground'}`}
+                        />
+                        <span
+                          className={`font-medium ${isActive ? 'text-primary font-semibold' : ''}`}
+                        >
+                          {item.title}
+                        </span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
+
+      <SidebarFooter className="border-t border-border/50 p-4">
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              asChild
+              className="text-muted-foreground hover:bg-muted hover:text-foreground"
+            >
+              <a href="#" className="flex items-center gap-3">
+                <HelpCircle className="h-5 w-5" />
+                <span className="font-medium">Ajuda e Suporte</span>
+              </a>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
     </Sidebar>
   )
 }
