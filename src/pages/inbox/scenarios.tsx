@@ -44,7 +44,7 @@ export const SCENARIOS = {
     ],
   },
   scenario1: {
-    name: 'Carlos',
+    name: 'Carlos Almeida',
     phone: '+55 (11) 98765-1111',
     verified: false,
     avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=1',
@@ -67,30 +67,38 @@ export const SCENARIOS = {
             20 anos de experiência. 💙
             <br />
             <br />
-            Para o espermograma, é necessário um período de abstinência sexual de 2 a 7 dias.
+            Para o espermograma, é necessário um período de abstenção sexual de 2 a 7 dias. O exame
+            é realizado mediante agendamento prévio.
             <br />
             <br />
             Preparei um material exclusivo para você:
-            <br />📘 <strong>E-book: Mapa da Fertilidade Masculina</strong>
             <br />
-            <a href="#" className="text-secondary font-medium hover:underline">
-              Baixar E-book
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 text-emerald-300 font-bold hover:text-emerald-200 transition-colors mt-2 bg-black/15 px-3 py-2 rounded-lg text-sm"
+            >
+              📘 E-book: Mapa da Fertilidade Masculina
             </a>
             <br />
             <br />
-            Gostaria de agendar o seu exame?
+            Gostaria de agendar o seu exame conosco?
           </>
         ),
         time: '10:01',
       },
+      {
+        id: 'm3',
+        sender: 'action',
+        actions: ['Agendar Exame', 'Falar com Atendente'],
+      },
     ],
   },
   scenario2: {
-    name: 'Luciana',
+    name: 'Luciana Costa',
     phone: '+55 (11) 98765-2222',
     verified: false,
     avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=female&seed=2',
-    initials: 'LU',
+    initials: 'LC',
     messages: [
       {
         id: 'm1',
@@ -114,10 +122,12 @@ export const SCENARIOS = {
             <br />
             Nosso diretor técnico, Dr. Rafael Toledo, é Delegado Regional da SBCC (Sociedade
             Brasileira de Citologia Clínica) e preparou um material especial para você:
-            <br />📘 <strong>E-book: O Seu Preventivo Descomplicado</strong>
             <br />
-            <a href="#" className="text-secondary font-medium hover:underline">
-              Baixar E-book
+            <a
+              href="#"
+              className="inline-flex items-center gap-2 text-emerald-300 font-bold hover:text-emerald-200 transition-colors mt-2 bg-black/15 px-3 py-2 rounded-lg text-sm"
+            >
+              📘 E-book: O Seu Preventivo Descomplicado
             </a>
             <br />
             <br />
@@ -126,14 +136,19 @@ export const SCENARIOS = {
         ),
         time: '11:31',
       },
+      {
+        id: 'm3',
+        sender: 'action',
+        actions: ['Agendar Data', 'Falar com Atendente'],
+      },
     ],
   },
   scenario3: {
-    name: 'Ricardo',
+    name: 'Ricardo Gomes',
     phone: '+55 (11) 98765-3333',
     verified: false,
     avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=3',
-    initials: 'RI',
+    initials: 'RG',
     messages: [
       {
         id: 'm1',
@@ -146,7 +161,8 @@ export const SCENARIOS = {
         sender: 'ai',
         text: (
           <>
-            Compreendo sua preocupação, Ricardo. A segurança dos seus resultados é nossa prioridade!
+            Compreendo sua preocupação, Ricardo. A segurança dos seus resultados é nossa prioridade
+            absoluta!
             <br />
             <br />O <strong>São Lucas Centro de Diagnósticos</strong> possui a classificação 'Padrão
             Ouro' pelo PNCQ (Programa Nacional de Controle de Qualidade). Nosso responsável técnico,
@@ -156,9 +172,14 @@ export const SCENARIOS = {
             <br />
             Você pode conferir mais sobre nosso trabalho e dicas de saúde no Instagram do Dr.
             Rafael:
-            <br />👉{' '}
-            <a href="#" className="text-secondary font-medium hover:underline">
-              @rafaeltoledo.laboratorio
+            <br />
+            <a
+              href="https://instagram.com/rafaeltoledo.laboratorio"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 text-emerald-300 font-bold hover:text-emerald-200 transition-colors mt-2 bg-black/15 px-3 py-2 rounded-lg text-sm"
+            >
+              👉 @rafaeltoledo.laboratorio
             </a>
             <br />
             <br />

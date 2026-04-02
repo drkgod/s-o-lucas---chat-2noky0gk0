@@ -5,122 +5,74 @@
 @layer base {
   :root {
     --background: 0 0% 100%;
-    /* Dark blueish grey instead of pure black for better brand alignment */
-    --foreground: 214 40% 15%;
+    --foreground: 222.2 84% 4.9%;
 
     --card: 0 0% 100%;
-    --card-foreground: 214 40% 15%;
+    --card-foreground: 222.2 84% 4.9%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 214 40% 15%;
+    --popover-foreground: 222.2 84% 4.9%;
 
-    /* Brand Blue: The deep blue shade from the shield (#1c4d8c) */
-    --primary: 214 67% 33%;
-    --primary-foreground: 0 0% 100%;
+    /* São Lucas Blue - Primary */
+    --primary: 215 90% 32%;
+    --primary-foreground: 210 40% 98%;
 
-    /* Brand Green: The vibrant green from the shield (#129345) */
-    --secondary: 144 78% 32%;
-    --secondary-foreground: 0 0% 100%;
+    /* São Lucas Green - Secondary */
+    --secondary: 152 76% 36%;
+    --secondary-foreground: 210 40% 98%;
 
-    /* Brand Gray: Used for muted backgrounds and borders */
-    --muted: 210 10% 96%;
-    /* Brand Gray text: from "Centro de Diagnósticos" (#808285) */
-    --muted-foreground: 210 2% 51%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
-    --accent: 210 10% 96%;
-    --accent-foreground: 214 67% 33%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
 
     --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 100%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 210 10% 90%;
-    --input: 210 10% 90%;
-
-    /* Focus rings use Brand Blue */
-    --ring: 214 67% 33%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 215 90% 32%;
 
     --radius: 0.5rem;
-
-    --chart-1: 214 67% 33%; /* Brand Blue */
-    --chart-2: 144 78% 32%; /* Brand Green */
-    --chart-3: 210 2% 51%; /* Brand Gray */
-    --chart-4: 199 89% 48%; /* Accent Cyan */
-    --chart-5: 43 74% 66%; /* Accent Yellow */
   }
 
   .dark {
-    --background: 214 40% 8%;
-    --foreground: 0 0% 98%;
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
 
-    --card: 214 40% 12%;
-    --card-foreground: 0 0% 98%;
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
 
-    --popover: 214 40% 12%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
 
-    /* Slightly lighter Blue for dark mode contrast */
-    --primary: 214 67% 55%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 215 90% 60%;
+    --primary-foreground: 222.2 47.4% 11.2%;
 
-    /* Slightly lighter Green for dark mode contrast */
-    --secondary: 144 78% 45%;
-    --secondary-foreground: 0 0% 100%;
+    --secondary: 152 76% 45%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
 
-    --muted: 214 20% 18%;
-    --muted-foreground: 210 2% 65%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 214 20% 18%;
-    --accent-foreground: 214 67% 55%;
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 210 40% 98%;
 
-    --border: 214 20% 20%;
-    --input: 214 20% 20%;
-    --ring: 214 67% 55%;
-
-    --chart-1: 214 67% 55%;
-    --chart-2: 144 78% 45%;
-    --chart-3: 210 2% 65%;
-    --chart-4: 199 89% 55%;
-    --chart-5: 43 74% 50%;
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 215 90% 60%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
     @apply bg-background text-foreground;
-  }
-}
-
-/* Custom Utilities for Micro-interactions */
-.animate-fade-in {
-  animation: fade-in 0.4s ease-out forwards;
-}
-
-.animate-slide-up {
-  animation: slide-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
-@keyframes slide-up {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import {
   Send,
   Phone,
@@ -25,16 +25,91 @@ import {
 import logoUrl from '@/assets/logo-02-4a0a7.png'
 import { SCENARIOS, ScenarioId } from './scenarios'
 
-export default function ChatArea() {
-  const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId>('default')
+export default function ChatArea({ className }: { className?: string }) {
+  const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId>('scenario1')
   const scenario = SCENARIOS[activeScenarioId]
 
+  const [messages, setMessages] = useState<any[]>([])
+  const [inputValue, setInputValue] = useState('')
+  const [isTyping, setIsTyping] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    // Start simulation when scenario changes
+    setMessages([])
+    setIsTyping(true)
+
+    const timer1 = setTimeout(() => {
+      setMessages([scenario.messages[0]])
+      setIsTyping(true)
+
+      const timer2 = setTimeout(() => {
+        setMessages((prev) => [...prev, scenario.messages[1]])
+        setIsTyping(false)
+
+        if (scenario.messages[2]) {
+          const timer3 = setTimeout(() => {
+            setMessages((prev) => [...prev, scenario.messages[2]])
+          }, 800)
+          return () => clearTimeout(timer3)
+        }
+      }, 2000)
+      return () => clearTimeout(timer2)
+    }, 500)
+
+    return () => {
+      clearTimeout(timer1)
+    }
+  }, [activeScenarioId, scenario])
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }, [messages, isTyping])
+
+  const handleSend = () => {
+    if (!inputValue.trim()) return
+
+    const newMsg = {
+      id: Date.now().toString(),
+      sender: 'human',
+      text: inputValue,
+      time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    }
+
+    setMessages((prev) => [...prev, newMsg])
+    setInputValue('')
+    setIsTyping(true)
+
+    // Simulate patient responding to the user's message
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: (Date.now() + 1).toString(),
+          sender: 'user',
+          text: 'Certo, compreendido! Agradeço muito pelas orientações.',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ])
+      setIsTyping(false)
+    }, 2500)
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSend()
+    }
+  }
+
   return (
-    <div className="flex flex-col h-full bg-background animate-fade-in relative z-0">
+    <div
+      className={`flex flex-col h-full bg-background animate-fade-in relative z-0 ${className || ''}`}
+    >
       <div className="bg-primary/5 border-b border-primary/10 px-6 py-2 flex items-center justify-between text-sm">
         <div className="flex items-center gap-2 text-primary font-medium">
           <Bot className="w-4 h-4" />
-          <span className="hidden sm:inline">Atendimento iniciado pela IA (Triagem concluída)</span>
+          <span className="hidden sm:inline">Atendimento supervisionado pela IA</span>
           <span className="sm:hidden">IA Ativa</span>
         </div>
         <div className="flex items-center gap-3">
@@ -83,7 +158,7 @@ export default function ChatArea() {
               )}
             </h2>
             <p className="text-sm text-muted-foreground flex items-center gap-1.5 font-medium">
-              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_rgba(18,147,69,0.6)]"></span>
+              <span className="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-[0_0_8px_rgba(22,163,74,0.6)]"></span>
               WhatsApp • {scenario.phone}
             </p>
           </div>
@@ -126,20 +201,20 @@ export default function ChatArea() {
         <div className="relative p-6 space-y-8 max-w-4xl mx-auto">
           <div className="flex justify-center my-4">
             <span className="bg-muted px-4 py-1 rounded-full text-xs font-medium text-muted-foreground border shadow-sm">
-              Hoje, 16 de Março
+              Simulação de Atendimento
             </span>
           </div>
 
-          {scenario.messages.map((msg) => {
+          {messages.map((msg) => {
             if (msg.sender === 'user') {
               return (
                 <div key={msg.id} className="flex items-start gap-3 animate-fade-in-up">
-                  <Avatar className="h-9 w-9 mt-1 shrink-0 shadow-sm">
+                  <Avatar className="h-9 w-9 mt-1 shrink-0 shadow-sm border border-gray-200">
                     <AvatarImage src={scenario.avatar} />
                     <AvatarFallback>{scenario.initials}</AvatarFallback>
                   </Avatar>
                   <div className="flex flex-col gap-1 max-w-[85%] sm:max-w-[75%]">
-                    <div className="bg-card border border-border/60 text-foreground rounded-2xl rounded-tl-sm px-5 py-3 shadow-sm text-[15px] leading-relaxed">
+                    <div className="bg-gray-100 border border-gray-200 text-gray-800 rounded-2xl rounded-tl-sm px-5 py-3 shadow-sm text-[15px] leading-relaxed">
                       {msg.text}
                     </div>
                     <span className="text-[11px] text-muted-foreground font-medium ml-1">
@@ -148,24 +223,37 @@ export default function ChatArea() {
                   </div>
                 </div>
               )
-            } else if (msg.sender === 'ai') {
+            } else if (msg.sender === 'ai' || msg.sender === 'human') {
+              const isHuman = msg.sender === 'human'
               return (
                 <div
                   key={msg.id}
                   className="flex items-start gap-3 flex-row-reverse animate-fade-in-up"
                 >
-                  <Avatar className="h-9 w-9 mt-1 shrink-0 border-2 border-primary/20 bg-white shadow-sm flex items-center justify-center p-1">
-                    <img src={logoUrl} alt="SL" className="w-full h-full object-contain" />
+                  <Avatar
+                    className={`h-9 w-9 mt-1 shrink-0 border-2 bg-white shadow-sm flex items-center justify-center p-1 ${isHuman ? 'border-secondary/20' : 'border-primary/20'}`}
+                  >
+                    {isHuman ? (
+                      <div className="bg-secondary text-white w-full h-full rounded-full flex items-center justify-center text-[10px] font-bold">
+                        SL
+                      </div>
+                    ) : (
+                      <img src={logoUrl} alt="SL" className="w-full h-full object-contain" />
+                    )}
                   </Avatar>
                   <div className="flex flex-col gap-1 items-end max-w-[85%] sm:max-w-[75%]">
-                    <div className="bg-primary text-primary-foreground rounded-2xl rounded-tr-sm px-5 py-3 shadow-md text-[15px] leading-relaxed">
+                    <div
+                      className={`text-white rounded-2xl rounded-tr-sm px-5 py-3 shadow-md text-[15px] leading-relaxed ${isHuman ? 'bg-secondary' : 'bg-primary'}`}
+                    >
                       {msg.text}
                     </div>
                     <div className="flex items-center gap-1 mr-1">
                       <span className="text-[11px] text-muted-foreground font-medium text-right">
                         {msg.time}
                       </span>
-                      <CheckCheck className="w-3.5 h-3.5 text-secondary" />
+                      <CheckCheck
+                        className={`w-3.5 h-3.5 ${isHuman ? 'text-secondary' : 'text-primary'}`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -177,15 +265,15 @@ export default function ChatArea() {
                   className="flex flex-col items-end gap-2 max-w-[85%] sm:max-w-[75%] ml-auto -mt-4 pr-12 animate-fade-in-up"
                 >
                   <div className="flex gap-2 flex-wrap justify-end">
-                    {msg.actions?.map((action, i) => (
+                    {msg.actions?.map((action: string, i: number) => (
                       <Button
                         key={i}
                         variant={i === 0 ? 'outline' : 'default'}
                         size="sm"
                         className={
                           i === 0
-                            ? 'bg-card border-primary/30 text-primary hover:bg-primary hover:text-white rounded-full text-xs'
-                            : 'bg-secondary hover:bg-secondary/90 text-white rounded-full text-xs'
+                            ? 'bg-white border-primary/30 text-primary hover:bg-primary hover:text-white rounded-full text-xs shadow-sm'
+                            : 'bg-emerald-500 hover:bg-emerald-600 text-white rounded-full text-xs shadow-sm'
                         }
                       >
                         {action}
@@ -197,19 +285,44 @@ export default function ChatArea() {
             }
             return null
           })}
+
+          {isTyping && (
+            <div className="flex items-start gap-3 flex-row-reverse animate-fade-in-up">
+              <Avatar className="h-9 w-9 mt-1 shrink-0 border-2 border-primary/20 bg-white shadow-sm flex items-center justify-center p-1">
+                <img src={logoUrl} alt="SL" className="w-full h-full object-contain" />
+              </Avatar>
+              <div className="flex flex-col gap-1 items-end">
+                <div className="bg-primary/10 text-primary rounded-2xl rounded-tr-sm px-5 py-4 shadow-sm flex items-center gap-1.5">
+                  <span
+                    className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: '0ms' }}
+                  ></span>
+                  <span
+                    className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: '150ms' }}
+                  ></span>
+                  <span
+                    className="w-1.5 h-1.5 bg-primary rounded-full animate-bounce"
+                    style={{ animationDelay: '300ms' }}
+                  ></span>
+                </div>
+              </div>
+            </div>
+          )}
+          <div ref={messagesEndRef} className="h-2" />
         </div>
       </ScrollArea>
 
       <div className="p-4 bg-card border-t shadow-[0_-4px_20px_-15px_rgba(0,0,0,0.1)] z-10">
         <div className="max-w-4xl mx-auto flex flex-col gap-2">
           <div className="flex items-center gap-1 text-muted-foreground px-2 pb-1">
-            <span className="text-xs font-medium mr-2">Modo: Supervisão da IA</span>
+            <span className="text-xs font-medium mr-2">Modo: Teste de Simulação</span>
             <div className="w-px h-3 bg-border mx-2"></div>
             <Button variant="ghost" size="sm" className="h-6 text-xs hover:text-primary px-2">
               Usar Template
             </Button>
             <Button variant="ghost" size="sm" className="h-6 text-xs hover:text-primary px-2">
-              Anexar Exame
+              Anexar Arquivo
             </Button>
           </div>
 
@@ -223,14 +336,19 @@ export default function ChatArea() {
             </Button>
             <div className="flex-1 bg-muted/40 border border-input focus-within:border-primary focus-within:ring-1 focus-within:ring-primary rounded-2xl transition-all overflow-hidden relative">
               <textarea
-                placeholder="Digite uma mensagem para assumir o atendimento ou orientar a IA..."
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Digite uma mensagem para interagir na simulação..."
                 className="w-full bg-transparent min-h-[44px] max-h-[120px] px-4 py-3 text-sm focus:outline-none resize-none overflow-y-auto block"
                 rows={1}
               />
             </div>
             <Button
+              onClick={handleSend}
+              disabled={!inputValue.trim()}
               size="icon"
-              className="rounded-full w-12 h-12 bg-secondary hover:bg-secondary/90 text-white shrink-0 shadow-md transition-all hover:scale-105 active:scale-95 flex items-center justify-center"
+              className="rounded-full w-12 h-12 bg-secondary hover:bg-secondary/90 text-white shrink-0 shadow-md transition-all hover:scale-105 active:scale-95 flex items-center justify-center disabled:opacity-50 disabled:hover:scale-100"
             >
               <Send className="h-5 w-5 ml-1" />
             </Button>
