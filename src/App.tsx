@@ -7,6 +7,7 @@ import Header from '@/components/Header'
 import Index from '@/pages/Index'
 import Configuration from '@/pages/Configuration'
 import ChatArea from '@/pages/inbox/ChatArea'
+import Patients from '@/pages/Patients'
 import NotFound from '@/pages/NotFound'
 
 function AppLayout() {
@@ -36,6 +37,7 @@ export default function App() {
           {/* Main App Routes with Sidebar & Header */}
           <Route element={<AppLayout />}>
             <Route path="/inbox" element={<ChatArea />} />
+            <Route path="/pacientes" element={<Patients />} />
             <Route path="/configuracao" element={<Configuration />} />
             <Route path="*" element={<NotFound />} />
           </Route>
