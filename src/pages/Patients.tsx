@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Search, MoreHorizontal, Eye, FileText, UserPlus } from 'lucide-react'
 import {
   Table,
@@ -19,66 +20,56 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-
-const mockPatients = [
-  {
-    id: 'p1',
-    name: 'Ana Souza',
-    contact: '(11) 98765-4321',
-    lastExam: 'Hemograma Completo',
-    date: '12/10/2023',
-    status: 'Concluído',
-  },
-  {
-    id: 'p2',
-    name: 'Carlos Mendes',
-    contact: '(11) 91234-5678',
-    lastExam: 'Espermograma',
-    date: '15/01/2024',
-    status: 'Ativo',
-  },
-  {
-    id: 'p3',
-    name: 'Mariana Silva',
-    contact: '(11) 99988-7766',
-    lastExam: 'Preventivo',
-    date: '20/02/2024',
-    status: 'Pendente',
-  },
-  {
-    id: 'p4',
-    name: 'João Pedro',
-    contact: '(11) 97777-6666',
-    lastExam: 'Exame Toxicológico',
-    date: '15/02/2024',
-    status: 'Concluído',
-  },
-  {
-    id: 'p5',
-    name: 'Lucia Fernandes',
-    contact: '(11) 94444-3333',
-    lastExam: 'Citologia',
-    date: '10/03/2024',
-    status: 'Pendente',
-  },
-  {
-    id: 'p6',
-    name: 'Roberto Alves',
-    contact: '(11) 95555-2222',
-    lastExam: 'Eletrocardiograma',
-    date: '05/01/2024',
-    status: 'Ativo',
-  },
-]
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import { Label } from '@/components/ui/label'
+import { mockPatients } from '@/lib/mock'
+import { Patient } from '@/lib/types'
 
 export default function Patients() {
+  const navigate = useNavigate()
   const [searchTerm, setSearchTerm] = useState('')
+  const [patients, setPatients] = useState<Patient[]>(mockPatients)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
 
-  const filteredPatients = mockPatients.filter(
+  const [newPatient, setNewPatient] = useState({
+    name: '',
+    contact: '',
+    email: '',
+    cpf: '',
+  })
+
+  const filteredPatients = patients.filter(
     (patient) =>
       patient.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       patient.contact.includes(searchTerm),
   )
+
+  const handleAddPatient = (e: React.FormEvent) => {
+    e.preventDefault()
+    const patient: Patient = {
+      id: `p${Date.now()}`,
+      name: newPatient.name,
+      contact: newPatient.contact,
+      email: newPatient.email,
+      cpf: newPatient.cpf,
+      lastExam: '-',
+      date: new Date().toLocaleDateString('pt-BR'),
+      status: 'Ativo',
+      exams: [],
+      chats: [],
+    }
+    setPatients([patient, ...patients])
+    setIsDialogOpen(false)
+    setNewPatient({ name: '', contact: '', email: '', cpf: '' })
+  }
 
   const getStatusBadge = (status: string) => {
     switch (status) {
@@ -115,10 +106,69 @@ export default function Patients() {
           </p>
         </div>
         <div className="w-full sm:w-auto flex items-center gap-3">
-          <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200">
-            <UserPlus className="mr-2 h-4 w-4" />
-            Novo Paciente
-          </Button>
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200">
+                <UserPlus className="mr-2 h-4 w-4" />
+                Novo Paciente
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px]">
+              <DialogHeader>
+                <DialogTitle>Adicionar Novo Paciente</DialogTitle>
+                <DialogDescription>
+                  Preencha os dados básicos para registrar o paciente no sistema local.
+                </DialogDescription>
+              </DialogHeader>
+              <form onSubmit={handleAddPatient} className="space-y-4 py-4">
+                <div className="space-y-2">
+                  <Label htmlFor="name">Nome Completo</Label>
+                  <Input
+                    id="name"
+                    required
+                    value={newPatient.name}
+                    onChange={(e) => setNewPatient({ ...newPatient, name: e.target.value })}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="cpf">CPF / RG</Label>
+                  <Input
+                    id="cpf"
+                    value={newPatient.cpf}
+                    onChange={(e) => setNewPatient({ ...newPatient, cpf: e.target.value })}
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="contact">Telefone</Label>
+                    <Input
+                      id="contact"
+                      required
+                      value={newPatient.contact}
+                      onChange={(e) => setNewPatient({ ...newPatient, contact: e.target.value })}
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">E-mail</Label>
+                    <Input
+                      id="email"
+                      type="email"
+                      value={newPatient.email}
+                      onChange={(e) => setNewPatient({ ...newPatient, email: e.target.value })}
+                    />
+                  </div>
+                </div>
+                <DialogFooter className="mt-6 pt-4 border-t border-slate-100">
+                  <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>
+                    Cancelar
+                  </Button>
+                  <Button type="submit" className="bg-blue-600 hover:bg-blue-700">
+                    Salvar Registro
+                  </Button>
+                </DialogFooter>
+              </form>
+            </DialogContent>
+          </Dialog>
         </div>
       </div>
 
@@ -187,11 +237,17 @@ export default function Patients() {
                             Ações
                           </DropdownMenuLabel>
                           <DropdownMenuSeparator className="bg-slate-100" />
-                          <DropdownMenuItem className="cursor-pointer text-slate-700 focus:text-slate-900 focus:bg-slate-50">
+                          <DropdownMenuItem
+                            className="cursor-pointer text-slate-700 focus:text-slate-900 focus:bg-slate-50"
+                            onClick={() => navigate(`/pacientes/${patient.id}`)}
+                          >
                             <Eye className="mr-2 h-4 w-4 text-slate-400" />
                             <span>Ver Detalhes</span>
                           </DropdownMenuItem>
-                          <DropdownMenuItem className="cursor-pointer text-slate-700 focus:text-slate-900 focus:bg-slate-50">
+                          <DropdownMenuItem
+                            className="cursor-pointer text-slate-700 focus:text-slate-900 focus:bg-slate-50"
+                            onClick={() => navigate(`/pacientes/${patient.id}?tab=history`)}
+                          >
                             <FileText className="mr-2 h-4 w-4 text-slate-400" />
                             <span>Histórico Médico</span>
                           </DropdownMenuItem>

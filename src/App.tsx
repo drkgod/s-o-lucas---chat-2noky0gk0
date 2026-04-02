@@ -8,6 +8,7 @@ import Index from '@/pages/Index'
 import Configuration from '@/pages/Configuration'
 import ChatArea from '@/pages/inbox/ChatArea'
 import Patients from '@/pages/Patients'
+import PatientProfile from '@/pages/PatientProfile'
 import NotFound from '@/pages/NotFound'
 
 function AppLayout() {
@@ -38,6 +39,7 @@ export default function App() {
           <Route element={<AppLayout />}>
             <Route path="/inbox" element={<ChatArea />} />
             <Route path="/pacientes" element={<Patients />} />
+            <Route path="/pacientes/:id" element={<PatientProfile />} />
             <Route path="/configuracao" element={<Configuration />} />
             <Route path="*" element={<NotFound />} />
           </Route>

@@ -1,4 +1,111 @@
-import { Chat, ServiceItem } from './types'
+import { Chat, ServiceItem, Patient } from './types'
+
+export const mockPatients: Patient[] = [
+  {
+    id: 'p1',
+    name: 'Ana Souza',
+    contact: '(11) 98765-4321',
+    email: 'ana.souza@email.com',
+    cpf: '111.222.333-44',
+    lastExam: 'Hemograma Completo',
+    date: '12/10/2023',
+    status: 'Concluído',
+    exams: [
+      {
+        id: 'e1',
+        name: 'Hemograma Completo',
+        date: '12/10/2023',
+        result: 'Normal',
+        status: 'Concluído',
+      },
+      {
+        id: 'e2',
+        name: 'Glicemia em Jejum',
+        date: '12/10/2023',
+        result: '95 mg/dL',
+        status: 'Concluído',
+      },
+    ],
+    chats: [
+      {
+        id: 'ch1',
+        date: '10/10/2023',
+        summary: 'Dúvidas sobre o preparo para hemograma',
+        status: 'Resolvido',
+      },
+    ],
+  },
+  {
+    id: 'p2',
+    name: 'Carlos Mendes',
+    contact: '(11) 91234-5678',
+    email: 'carlos.mendes@email.com',
+    cpf: '222.333.444-55',
+    lastExam: 'Espermograma',
+    date: '15/01/2024',
+    status: 'Ativo',
+    exams: [
+      {
+        id: 'e3',
+        name: 'Espermograma',
+        date: '15/01/2024',
+        result: 'Aguardando Análise',
+        status: 'Pendente',
+      },
+    ],
+    chats: [
+      {
+        id: 'ch2',
+        date: '12/01/2024',
+        summary: 'Agendamento e orientações do exame',
+        status: 'Resolvido',
+      },
+    ],
+  },
+  {
+    id: 'p3',
+    name: 'Mariana Silva',
+    contact: '(11) 99988-7766',
+    email: 'mariana.s@email.com',
+    cpf: '333.444.555-66',
+    lastExam: 'Preventivo',
+    date: '20/02/2024',
+    status: 'Pendente',
+    exams: [{ id: 'e4', name: 'Preventivo', date: '20/02/2024', result: '-', status: 'Agendado' }],
+    chats: [
+      {
+        id: 'ch3',
+        date: '15/02/2024',
+        summary: 'Confirmação de agendamento online',
+        status: 'Resolvido',
+      },
+    ],
+  },
+  {
+    id: 'p4',
+    name: 'João Pedro',
+    contact: '(11) 97777-6666',
+    lastExam: 'Exame Toxicológico',
+    date: '15/02/2024',
+    status: 'Concluído',
+  },
+  {
+    id: 'p5',
+    name: 'Lucia Fernandes',
+    contact: '(11) 94444-3333',
+    lastExam: 'Citologia',
+    date: '10/03/2024',
+    status: 'Pendente',
+  },
+  {
+    id: 'p6',
+    name: 'Roberto Alves',
+    contact: '(11) 95555-2222',
+    lastExam: 'Eletrocardiograma',
+    date: '05/01/2024',
+    status: 'Ativo',
+  },
+]
 
 export const mockChats: Chat[] = [
   {

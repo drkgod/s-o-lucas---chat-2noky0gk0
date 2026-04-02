@@ -74,3 +74,31 @@ export interface ServiceItem {
   price: string
   instructions: string
 }
+
+export interface PatientExam {
+  id: string
+  name: string
+  date: string
+  result: string
+  status: 'Concluído' | 'Pendente' | 'Agendado'
+}
+
+export interface PatientChat {
+  id: string
+  date: string
+  summary: string
+  status: 'Resolvido' | 'Pendente'
+}
+
+export interface Patient {
+  id: string
+  name: string
+  contact: string
+  email?: string
+  cpf?: string
+  lastExam: string
+  date: string
+  status: string
+  exams?: PatientExam[]
+  chats?: PatientChat[]
+}
