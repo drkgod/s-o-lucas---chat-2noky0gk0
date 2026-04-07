@@ -102,3 +102,11 @@ export interface Patient {
   exams?: PatientExam[]
   chats?: PatientChat[]
 }
+
+export interface ExamItem {
+  id: string
+  code: string
+  name: string
+  category: 'Imagem' | 'Laboratorial' | 'Cardiologia' | 'Outros'
+  price: string
+}

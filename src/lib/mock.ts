@@ -1,4 +1,4 @@
-import { Chat, ServiceItem, Patient } from './types'
+import { Chat, ServiceItem, Patient, ExamItem } from './types'
 
 export const mockPatients: Patient[] = [
   {
@@ -263,6 +263,62 @@ export const mockChats: Chat[] = [
         type: 'text',
       },
     ],
+  },
+]
+
+export const mockExams: ExamItem[] = [
+  {
+    id: 'ex1',
+    code: 'HEM01',
+    name: 'Hemograma Completo',
+    category: 'Laboratorial',
+    price: 'R$ 45,00',
+  },
+  {
+    id: 'ex2',
+    code: 'GLI01',
+    name: 'Glicemia em Jejum',
+    category: 'Laboratorial',
+    price: 'R$ 20,00',
+  },
+  {
+    id: 'ex3',
+    code: 'ECG01',
+    name: 'Eletrocardiograma (ECG)',
+    category: 'Cardiologia',
+    price: 'R$ 180,00',
+  },
+  { id: 'ex4', code: 'RX01', name: 'Raio-X de Tórax', category: 'Imagem', price: 'R$ 120,00' },
+  {
+    id: 'ex5',
+    code: 'USG01',
+    name: 'Ultrassonografia Abdominal',
+    category: 'Imagem',
+    price: 'R$ 250,00',
+  },
+]
+
+export const mockImportedExams: ExamItem[] = [
+  {
+    id: 'ex6',
+    code: 'COL01',
+    name: 'Colesterol Total e Frações',
+    category: 'Laboratorial',
+    price: 'R$ 40,00',
+  },
+  {
+    id: 'ex7',
+    code: 'TGO01',
+    name: 'Transaminase Oxalacética (TGO)',
+    category: 'Laboratorial',
+    price: 'R$ 18,00',
+  },
+  {
+    id: 'ex8',
+    code: 'TGP01',
+    name: 'Transaminase Pirúvica (TGP)',
+    category: 'Laboratorial',
+    price: 'R$ 18,00',
   },
 ]
 

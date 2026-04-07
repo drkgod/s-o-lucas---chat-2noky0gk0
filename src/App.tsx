@@ -9,6 +9,7 @@ import Configuration from '@/pages/Configuration'
 import ChatArea from '@/pages/inbox/ChatArea'
 import Patients from '@/pages/Patients'
 import PatientProfile from '@/pages/PatientProfile'
+import Exams from '@/pages/Exams'
 import NotFound from '@/pages/NotFound'
 
 function AppLayout() {
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/inbox" element={<ChatArea />} />
             <Route path="/pacientes" element={<Patients />} />
             <Route path="/pacientes/:id" element={<PatientProfile />} />
+            <Route path="/exames" element={<Exams />} />
             <Route path="/configuracao" element={<Configuration />} />
             <Route path="*" element={<NotFound />} />
           </Route>
