@@ -21,9 +21,11 @@ import {
 } from '@/components/ui/dialog'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Badge } from '@/components/ui/badge'
+import { Checkbox } from '@/components/ui/checkbox'
 import { useToast } from '@/hooks/use-toast'
 import { mockExams, mockImportedExams } from '@/lib/mock'
 import { ExamItem } from '@/lib/types'
+import { QuoteModal } from './exams/QuoteModal'
 
 export default function Exams() {
   const [exams, setExams] = useState<ExamItem[]>(mockExams)
@@ -31,6 +33,10 @@ export default function Exams() {
   const [isImportOpen, setIsImportOpen] = useState(false)
   const [isImporting, setIsImporting] = useState(false)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+
+  const [selectedExamIds, setSelectedExamIds] = useState<Set<string>>(new Set())
+  const [isQuoteOpen, setIsQuoteOpen] = useState(false)
+  const [patientName, setPatientName] = useState('')
   const { toast } = useToast()
 
   const filteredExams = exams.filter(
@@ -40,6 +46,24 @@ export default function Exams() {
       exam.category.toLowerCase().includes(searchQuery.toLowerCase()),
   )
 
+  const toggleSelectAll = () => {
+    if (selectedExamIds.size === filteredExams.length && filteredExams.length > 0) {
+      setSelectedExamIds(new Set())
+    } else {
+      setSelectedExamIds(new Set(filteredExams.map((e) => e.id)))
+    }
+  }
+
+  const toggleSelectExam = (id: string) => {
+    const newSelected = new Set(selectedExamIds)
+    if (newSelected.has(id)) {
+      newSelected.delete(id)
+    } else {
+      newSelected.add(id)
+    }
+    setSelectedExamIds(newSelected)
+  }
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFile(e.target.files[0])
@@ -48,16 +72,12 @@ export default function Exams() {
 
   const handleImport = () => {
     if (!selectedFile) return
-
     setIsImporting(true)
-
-    // Simulate network/processing delay
     setTimeout(() => {
       setExams((prev) => [...prev, ...mockImportedExams])
       setIsImporting(false)
       setIsImportOpen(false)
       setSelectedFile(null)
-
       toast({
         title: 'Planilha importada com sucesso',
         description: `${mockImportedExams.length} novos exames foram adicionados à tabela.`,
@@ -77,6 +97,8 @@ export default function Exams() {
         return 'bg-slate-100 text-slate-800 border-transparent hover:bg-slate-200'
     }
   }
+
+  const selectedExamsList = exams.filter((e) => selectedExamIds.has(e.id))
 
   return (
     <div className="flex flex-col h-full bg-slate-50/50 p-6 overflow-hidden">
@@ -99,16 +121,13 @@ export default function Exams() {
             <DialogHeader>
               <DialogTitle>Importar Tabela de Exames</DialogTitle>
               <DialogDescription>
-                Faça o upload de uma planilha (CSV ou Excel) contendo os exames, categorias e
-                valores atualizados.
+                Faça o upload de uma planilha (CSV ou Excel) contendo os exames e valores
+                atualizados.
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="flex items-center justify-center w-full">
-                <label
-                  htmlFor="dropzone-file"
-                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-slate-50 border-slate-300 hover:bg-slate-100 transition-colors"
-                >
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-lg cursor-pointer bg-slate-50 border-slate-300 hover:bg-slate-100 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     {selectedFile ? (
                       <>
@@ -121,18 +140,15 @@ export default function Exams() {
                       <>
                         <FileSpreadsheet className="w-8 h-8 mb-2 text-slate-400" />
                         <p className="mb-2 text-sm text-slate-500">
-                          <span className="font-semibold">Clique para enviar</span> ou arraste o
-                          arquivo
+                          <span className="font-semibold">Clique para enviar</span> ou arraste
                         </p>
-                        <p className="text-xs text-slate-500">XLSX, XLS ou CSV (MAX. 10MB)</p>
                       </>
                     )}
                   </div>
                   <input
-                    id="dropzone-file"
                     type="file"
                     className="hidden"
-                    accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+                    accept=".csv, .xlsx, .xls"
                     onChange={handleFileChange}
                   />
                 </label>
@@ -159,8 +175,8 @@ export default function Exams() {
         <AlertCircle className="h-4 w-4 text-amber-600" />
         <AlertTitle className="text-amber-800">Aviso de Persistência</AlertTitle>
         <AlertDescription className="text-amber-700/90">
-          Como o banco de dados ainda não está conectado, os dados importados serão perdidos ao
-          recarregar a página. Esta é apenas uma demonstração visual do fluxo de importação.
+          Como o banco de dados não está conectado, dados importados serão perdidos ao recarregar a
+          página.
         </AlertDescription>
       </Alert>
 
@@ -182,6 +198,15 @@ export default function Exams() {
           <Table>
             <TableHeader className="bg-slate-50 sticky top-0 z-10">
               <TableRow>
+                <TableHead className="w-[50px] pl-4">
+                  <Checkbox
+                    checked={
+                      filteredExams.length > 0 && selectedExamIds.size === filteredExams.length
+                    }
+                    onCheckedChange={toggleSelectAll}
+                    aria-label="Selecionar todos"
+                  />
+                </TableHead>
                 <TableHead className="w-[100px]">Código</TableHead>
                 <TableHead>Nome do Exame</TableHead>
                 <TableHead>Categoria</TableHead>
@@ -191,7 +216,17 @@ export default function Exams() {
             <TableBody>
               {filteredExams.length > 0 ? (
                 filteredExams.map((exam) => (
-                  <TableRow key={exam.id}>
+                  <TableRow
+                    key={exam.id}
+                    data-state={selectedExamIds.has(exam.id) ? 'selected' : undefined}
+                  >
+                    <TableCell className="pl-4">
+                      <Checkbox
+                        checked={selectedExamIds.has(exam.id)}
+                        onCheckedChange={() => toggleSelectExam(exam.id)}
+                        aria-label={`Selecionar ${exam.name}`}
+                      />
+                    </TableCell>
                     <TableCell className="font-medium text-slate-600">{exam.code}</TableCell>
                     <TableCell className="font-medium">{exam.name}</TableCell>
                     <TableCell>
@@ -204,7 +239,7 @@ export default function Exams() {
                 ))
               ) : (
                 <TableRow>
-                  <TableCell colSpan={4} className="h-24 text-center text-slate-500">
+                  <TableCell colSpan={5} className="h-24 text-center text-slate-500">
                     Nenhum exame encontrado para "{searchQuery}"
                   </TableCell>
                 </TableRow>
@@ -213,6 +248,17 @@ export default function Exams() {
           </Table>
         </div>
       </div>
+
+      {selectedExamIds.size > 0 && (
+        <QuoteModal
+          isOpen={isQuoteOpen}
+          onOpenChange={setIsQuoteOpen}
+          selectedExams={selectedExamsList}
+          patientName={patientName}
+          setPatientName={setPatientName}
+          onClear={() => setSelectedExamIds(new Set())}
+        />
+      )}
     </div>
   )
 }

@@ -26,8 +26,28 @@ import logoUrl from '@/assets/logo-02-4a0a7.png'
 import { SCENARIOS, ScenarioId } from './scenarios'
 
 export default function ChatArea({ className }: { className?: string }) {
-  const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId>('scenario1')
-  const scenario = SCENARIOS[activeScenarioId]
+  const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId | 'dr-rafael'>('dr-rafael')
+
+  const isRafaelScenario = activeScenarioId === 'dr-rafael'
+  const customScenario = {
+    name: 'Dr. Rafael Toledo (IA Exames)',
+    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=42',
+    initials: 'RT',
+    phone: 'Assistente Virtual',
+    verified: true,
+    messages: [
+      {
+        id: 'init-1',
+        sender: 'ai',
+        text: 'Olá! Sou o Dr. Rafael Toledo, assistente virtual do São Lucas. Estou integrado à nossa base de exames. O que deseja consultar? (Ex: "Qual o valor do Hemograma?" ou "Como é o preparo para Ultrassom?")',
+        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      },
+    ],
+  }
+
+  const scenario = isRafaelScenario
+    ? customScenario
+    : SCENARIOS[activeScenarioId as ScenarioId] || SCENARIOS['default']
 
   const [messages, setMessages] = useState<any[]>([])
   const [inputValue, setInputValue] = useState('')
@@ -40,11 +60,13 @@ export default function ChatArea({ className }: { className?: string }) {
     setIsTyping(true)
 
     const timer1 = setTimeout(() => {
-      setMessages([scenario.messages[0]])
+      setMessages([scenario.messages[0]].filter(Boolean))
       setIsTyping(true)
 
       const timer2 = setTimeout(() => {
-        setMessages((prev) => [...prev, scenario.messages[1]])
+        if (scenario.messages[1]) {
+          setMessages((prev) => [...prev, scenario.messages[1]])
+        }
         setIsTyping(false)
 
         if (scenario.messages[2]) {
@@ -71,7 +93,7 @@ export default function ChatArea({ className }: { className?: string }) {
 
     const newMsg = {
       id: Date.now().toString(),
-      sender: 'human',
+      sender: isRafaelScenario ? 'user' : 'human',
       text: inputValue,
       time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     }
@@ -80,19 +102,82 @@ export default function ChatArea({ className }: { className?: string }) {
     setInputValue('')
     setIsTyping(true)
 
-    // Simulate patient responding to the user's message
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: (Date.now() + 1).toString(),
-          sender: 'user',
-          text: 'Certo, compreendido! Agradeço muito pelas orientações.',
-          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-        },
-      ])
-      setIsTyping(false)
-    }, 2500)
+    if (isRafaelScenario) {
+      setTimeout(() => {
+        import('@/lib/mock').then(({ mockExams, mockImportedExams }) => {
+          const lowerInput = newMsg.text.toLowerCase()
+          const allExams = [...mockExams, ...mockImportedExams]
+
+          const foundExam = allExams.find((e) => {
+            const nameParts = e.name
+              .toLowerCase()
+              .split(' ')
+              .filter((p) => p.length > 3)
+            return (
+              nameParts.some((part) => lowerInput.includes(part)) ||
+              lowerInput.includes(e.code.toLowerCase())
+            )
+          })
+
+          let aiText =
+            'Desculpe, não encontrei informações sobre esse exame. Pode verificar o nome e tentar novamente?'
+
+          if (foundExam) {
+            const isAskingPrice =
+              lowerInput.includes('valor') ||
+              lowerInput.includes('preço') ||
+              lowerInput.includes('custa') ||
+              lowerInput.includes('orçamento')
+            const isAskingPrep =
+              lowerInput.includes('preparo') ||
+              lowerInput.includes('jejum') ||
+              lowerInput.includes('instru') ||
+              lowerInput.includes('como')
+
+            if (isAskingPrice && isAskingPrep) {
+              aiText = `O valor do exame de ${foundExam.name} é ${foundExam.price}. Para este exame, a recomendação é: ${foundExam.instructions || 'Não requer preparo específico.'}`
+            } else if (isAskingPrice) {
+              aiText = `O valor do exame de ${foundExam.name} é ${foundExam.price}. Deseja que eu informe também o preparo necessário?`
+            } else if (isAskingPrep) {
+              aiText = `Para o exame de ${foundExam.name}, o preparo necessário é: ${foundExam.instructions || 'Não requer preparo específico.'}`
+            } else {
+              aiText = `Encontrei o exame "${foundExam.name}". O valor é ${foundExam.price} e o preparo é: ${foundExam.instructions || 'Nenhum preparo específico'}. Deseja agendar?`
+            }
+          } else if (
+            lowerInput.includes('olá') ||
+            lowerInput.includes('oi') ||
+            lowerInput.includes('bom dia')
+          ) {
+            aiText =
+              'Olá! Estou à disposição para consultar nossa tabela de exames. Qual exame você procura?'
+          }
+
+          setMessages((prev) => [
+            ...prev,
+            {
+              id: (Date.now() + 1).toString(),
+              sender: 'ai',
+              text: aiText,
+              time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+            },
+          ])
+          setIsTyping(false)
+        })
+      }, 1500)
+    } else {
+      setTimeout(() => {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: (Date.now() + 1).toString(),
+            sender: 'user',
+            text: 'Certo, compreendido! Agradeço muito pelas orientações.',
+            time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+          },
+        ])
+        setIsTyping(false)
+      }, 2500)
+    }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -123,6 +208,7 @@ export default function ChatArea({ className }: { className?: string }) {
                 <SelectValue placeholder="Selecione um cenário..." />
               </SelectTrigger>
               <SelectContent>
+                <SelectItem value="dr-rafael">Dr. Rafael Toledo (IA)</SelectItem>
                 <SelectItem value="default">Chat Normal</SelectItem>
                 <SelectItem value="scenario1">Simulação: Espermograma</SelectItem>
                 <SelectItem value="scenario2">Simulação: Preventivo</SelectItem>
@@ -316,7 +402,9 @@ export default function ChatArea({ className }: { className?: string }) {
       <div className="p-4 bg-card border-t shadow-[0_-4px_20px_-15px_rgba(0,0,0,0.1)] z-10">
         <div className="max-w-4xl mx-auto flex flex-col gap-2">
           <div className="flex items-center gap-1 text-muted-foreground px-2 pb-1">
-            <span className="text-xs font-medium mr-2">Modo: Teste de Simulação</span>
+            <span className="text-xs font-medium mr-2">
+              Modo: {isRafaelScenario ? 'Consulta de Exames IA' : 'Teste de Simulação'}
+            </span>
             <div className="w-px h-3 bg-border mx-2"></div>
             <Button variant="ghost" size="sm" className="h-6 text-xs hover:text-primary px-2">
               Usar Template

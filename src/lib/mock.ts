@@ -273,6 +273,7 @@ export const mockExams: ExamItem[] = [
     name: 'Hemograma Completo',
     category: 'Laboratorial',
     price: 'R$ 45,00',
+    instructions: 'Jejum de 8h a 12h. Água liberada.',
   },
   {
     id: 'ex2',
@@ -280,6 +281,7 @@ export const mockExams: ExamItem[] = [
     name: 'Glicemia em Jejum',
     category: 'Laboratorial',
     price: 'R$ 20,00',
+    instructions: 'Jejum absoluto de 8h.',
   },
   {
     id: 'ex3',
@@ -287,14 +289,23 @@ export const mockExams: ExamItem[] = [
     name: 'Eletrocardiograma (ECG)',
     category: 'Cardiologia',
     price: 'R$ 180,00',
+    instructions: 'Não requer jejum. Evitar cremes no tórax. Levar exames anteriores se possuir.',
   },
-  { id: 'ex4', code: 'RX01', name: 'Raio-X de Tórax', category: 'Imagem', price: 'R$ 120,00' },
+  {
+    id: 'ex4',
+    code: 'RX01',
+    name: 'Raio-X de Tórax',
+    category: 'Imagem',
+    price: 'R$ 120,00',
+    instructions: 'Remover colares e objetos metálicos da região do tórax. Não requer jejum.',
+  },
   {
     id: 'ex5',
     code: 'USG01',
     name: 'Ultrassonografia Abdominal',
     category: 'Imagem',
     price: 'R$ 250,00',
+    instructions: 'Jejum de 8h. Tomar 4 a 6 copos de água 1h antes do exame e reter a urina.',
   },
 ]
 
@@ -305,6 +316,7 @@ export const mockImportedExams: ExamItem[] = [
     name: 'Colesterol Total e Frações',
     category: 'Laboratorial',
     price: 'R$ 40,00',
+    instructions: 'Jejum de 12 horas. Manter dieta habitual nos dias anteriores.',
   },
   {
     id: 'ex7',
@@ -312,6 +324,7 @@ export const mockImportedExams: ExamItem[] = [
     name: 'Transaminase Oxalacética (TGO)',
     category: 'Laboratorial',
     price: 'R$ 18,00',
+    instructions: 'Jejum mínimo de 4 horas.',
   },
   {
     id: 'ex8',
@@ -319,6 +332,7 @@ export const mockImportedExams: ExamItem[] = [
     name: 'Transaminase Pirúvica (TGP)',
     category: 'Laboratorial',
     price: 'R$ 18,00',
+    instructions: 'Jejum mínimo de 4 horas.',
   },
 ]
 

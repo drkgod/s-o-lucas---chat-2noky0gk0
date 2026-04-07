@@ -107,6 +107,7 @@ export interface ExamItem {
   id: string
   code: string
   name: string
-  category: 'Imagem' | 'Laboratorial' | 'Cardiologia' | 'Outros'
+  category: 'Imagem' | 'Laboratorial' | 'Cardiologia' | 'Outros' | string
   price: string
+  instructions?: string
 }
