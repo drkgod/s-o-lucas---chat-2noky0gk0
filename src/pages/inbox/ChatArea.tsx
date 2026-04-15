@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 import {
   Send,
   Phone,
@@ -29,25 +29,30 @@ export default function ChatArea({ className }: { className?: string }) {
   const [activeScenarioId, setActiveScenarioId] = useState<ScenarioId | 'dr-rafael'>('dr-rafael')
 
   const isRafaelScenario = activeScenarioId === 'dr-rafael'
-  const customScenario = {
-    name: 'Dr. Rafael Toledo (IA Exames)',
-    avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=42',
-    initials: 'RT',
-    phone: 'Assistente Virtual',
-    verified: true,
-    messages: [
-      {
-        id: 'init-1',
-        sender: 'ai',
-        text: 'Olá! Sou o Dr. Rafael Toledo, assistente virtual do São Lucas. Estou integrado à nossa base de exames. O que deseja consultar? (Ex: "Qual o valor do Hemograma?" ou "Como é o preparo para Ultrassom?")',
-        time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      },
-    ],
-  }
+  const customScenario = useMemo(
+    () => ({
+      name: 'Dr. Rafael Toledo (IA Exames)',
+      avatar: 'https://img.usecurling.com/ppl/thumbnail?gender=male&seed=42',
+      initials: 'RT',
+      phone: 'Assistente Virtual',
+      verified: true,
+      messages: [
+        {
+          id: 'init-1',
+          sender: 'ai',
+          text: 'Olá! Sou o Dr. Rafael Toledo, assistente virtual do São Lucas. Estou integrado à nossa base de exames. O que deseja consultar? (Ex: "Qual o valor do Hemograma?" ou "Como é o preparo para Ultrassom?")',
+          time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        },
+      ],
+    }),
+    [],
+  )
 
-  const scenario = isRafaelScenario
-    ? customScenario
-    : SCENARIOS[activeScenarioId as ScenarioId] || SCENARIOS['default']
+  const scenario = useMemo(() => {
+    return isRafaelScenario
+      ? customScenario
+      : SCENARIOS[activeScenarioId as ScenarioId] || SCENARIOS['default']
+  }, [isRafaelScenario, customScenario, activeScenarioId])
 
   const [messages, setMessages] = useState<any[]>([])
   const [inputValue, setInputValue] = useState('')
