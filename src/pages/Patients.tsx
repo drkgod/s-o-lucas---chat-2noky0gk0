@@ -106,13 +106,14 @@ export default function Patients() {
           </p>
         </div>
         <div className="w-full sm:w-auto flex items-center gap-3">
+          <Button
+            className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200"
+            onClick={() => setIsDialogOpen(true)}
+          >
+            <UserPlus className="mr-2 h-4 w-4" />
+            Novo Paciente
+          </Button>
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogTrigger asChild>
-              <Button className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white shadow-sm transition-all duration-200">
-                <UserPlus className="mr-2 h-4 w-4" />
-                Novo Paciente
-              </Button>
-            </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
               <DialogHeader>
                 <DialogTitle>Adicionar Novo Paciente</DialogTitle>
@@ -220,14 +221,9 @@ export default function Patients() {
                     <TableCell className="py-3">{getStatusBadge(patient.status)}</TableCell>
                     <TableCell className="text-right py-3 pr-6">
                       <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            className="h-8 w-8 p-0 text-slate-400 hover:text-slate-700 hover:bg-slate-100 focus-visible:ring-1 focus-visible:ring-slate-300"
-                          >
-                            <span className="sr-only">Abrir menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
+                        <DropdownMenuTrigger className="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:text-slate-700 hover:bg-slate-100 h-8 w-8 p-0 text-slate-400 focus-visible:ring-1 focus-visible:ring-slate-300">
+                          <span className="sr-only">Abrir menu</span>
+                          <MoreHorizontal className="h-4 w-4" />
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                           align="end"
