@@ -1,12 +1,10 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react'
-import { Chat } from '@/lib/types'
-import { mockChats } from '@/lib/mock'
 
 interface AppState {
   activeChatId: string | null
   setActiveChatId: (id: string | null) => void
-  chats: Chat[]
-  setChats: React.Dispatch<React.SetStateAction<Chat[]>>
+  chats: any[]
+  setChats: any
   hasAlert: boolean
   setHasAlert: (v: boolean) => void
 }
@@ -15,7 +13,7 @@ const AppContext = createContext<AppState | undefined>(undefined)
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [activeChatId, setActiveChatId] = useState<string | null>(null)
-  const [chats, setChats] = useState<Chat[]>(mockChats)
+  const [chats, setChats] = useState<any[]>([])
   const [hasAlert, setHasAlert] = useState<boolean>(false)
 
   return React.createElement(

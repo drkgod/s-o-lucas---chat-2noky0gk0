@@ -1,235 +1,185 @@
-import {
-  FileText,
-  User,
-  Calendar,
-  MapPin,
-  Clock,
-  Activity,
-  Star,
-  AlertCircle,
-  ClipboardCheck,
-  CheckCircle,
-} from 'lucide-react'
-import { Card, CardContent } from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
-import { Textarea } from '@/components/ui/textarea'
-import { Progress } from '@/components/ui/progress'
+import { useState, useEffect } from 'react'
+import { FileText, User, Download, FileJson } from 'lucide-react'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Badge } from '@/components/ui/badge'
-import useAppStore from '@/stores/useAppStore'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
+import useAppStore from '@/stores/useAppStore'
+import { getDocuments } from '@/services/inbox'
+import pb from '@/lib/pocketbase/client'
 
 export default function ContactDetails({ className }: { className?: string }) {
-  const { activeChatId, chats } = useAppStore()
-  const chat = chats.find((c) => c.id === activeChatId)
+  const { activeChatId } = useAppStore()
+  const [documents, setDocuments] = useState<any[]>([])
+  const [conversation, setConversation] = useState<any>(null)
+  const [loading, setLoading] = useState(false)
+  const [expandedDoc, setExpandedDoc] = useState<string | null>(null)
 
-  if (!chat) {
+  const loadData = async () => {
+    if (!activeChatId) return
+    try {
+      setLoading(true)
+      const [docsRes, convRes] = await Promise.all([
+        getDocuments(activeChatId),
+        pb.collection('conversations').getOne(activeChatId),
+      ])
+      setDocuments(docsRes)
+      setConversation(convRes)
+    } catch (e) {
+      console.error(e)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    loadData()
+  }, [activeChatId])
+
+  if (!activeChatId) {
     return <div className={cn('bg-muted/30', className)} />
   }
 
   return (
-    <div className={cn('flex flex-col bg-card overflow-y-auto', className)}>
-      <div className="p-4 border-b">
+    <div className={cn('flex flex-col bg-card overflow-hidden', className)}>
+      <div className="p-4 border-b shrink-0">
         <h3 className="font-semibold flex items-center gap-2">
           <User className="h-4 w-4 text-muted-foreground" /> Detalhes do Paciente
         </h3>
       </div>
 
-      <div className="p-4 flex flex-col gap-6">
-        <div className="space-y-3">
-          <div className="flex items-center gap-2 text-sm">
-            <MapPin className="h-4 w-4 text-muted-foreground" />
-            <span>São Paulo, SP</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm">
-            <Clock className="h-4 w-4 text-muted-foreground" />
-            <span>Última interação: {chat.lastActivity || 'Hoje'}</span>
-          </div>
-        </div>
-
-        {chat.patientData && (
-          <>
-            <Separator />
-            <div>
-              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-                <ClipboardCheck className="h-3 w-3 text-primary" /> Dados do Pré-cadastro
-              </h4>
-              <div className="bg-primary/5 rounded-lg p-3 text-sm border border-primary/20">
-                <div className="grid grid-cols-1 gap-2 text-xs">
+      <ScrollArea className="flex-1">
+        <div className="p-4 flex flex-col gap-6">
+          {loading ? (
+            <div className="space-y-4">
+              <Skeleton className="h-4 w-full" />
+              <Skeleton className="h-4 w-2/3" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+              <Skeleton className="h-24 w-full rounded-xl" />
+            </div>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 gap-2 text-sm bg-muted/30 p-3 rounded-lg border border-border/50">
                   <div className="flex flex-col">
-                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                      Nome Completo
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold tracking-wider">
+                      Nome
                     </span>
-                    <span className="font-medium">{chat.patientData.name}</span>
+                    <span className="font-medium text-foreground">
+                      {conversation?.patient_name || '-'}
+                    </span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                      Nascimento
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold tracking-wider">
+                      WhatsApp
                     </span>
-                    <span className="font-medium">{chat.patientData.dob}</span>
+                    <span className="font-medium text-foreground">
+                      {conversation?.patient_whatsapp || '-'}
+                    </span>
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
+                    <span className="text-muted-foreground text-[10px] uppercase font-semibold tracking-wider">
                       CPF
                     </span>
-                    <span className="font-medium">{chat.patientData.cpf}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                      Endereço
+                    <span className="font-medium text-foreground">
+                      {conversation?.patient_cpf || '-'}
                     </span>
-                    <span className="font-medium">{chat.patientData.address}</span>
-                  </div>
-                  <div className="flex flex-col">
-                    <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                      Cobertura
-                    </span>
-                    <span className="font-medium">
-                      {chat.patientData.coverageType}{' '}
-                      {chat.patientData.coverageName ? `- ${chat.patientData.coverageName}` : ''}
-                    </span>
-                  </div>
-
-                  {(chat.patientData.isDiabetic !== undefined || chat.patientData.examReason) && (
-                    <>
-                      <div className="col-span-full h-px bg-primary/20 my-1" />
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                          Perfil Clínico
-                        </span>
-                        <span className="font-medium">
-                          {chat.patientData.isDiabetic ? 'Diabético' : 'Não Diabético'} •{' '}
-                          {chat.patientData.isHypertensive ? 'Hipertenso' : 'Não Hipertenso'}
-                        </span>
-                      </div>
-                      <div className="flex flex-col">
-                        <span className="text-muted-foreground text-[10px] uppercase font-semibold">
-                          Motivo dos Exames
-                        </span>
-                        <span className="font-medium">
-                          {chat.patientData.examReason || 'Não informado'}
-                        </span>
-                      </div>
-                    </>
-                  )}
-
-                  <div className="flex flex-col col-span-full mt-2 space-y-2">
-                    {chat.patientData.idDocumentProvided && (
-                      <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-1.5 rounded border border-emerald-500/20">
-                        <CheckCircle className="h-3.5 w-3.5 shrink-0" />
-                        <span>Documento de Identidade (RG/CNH) recebido</span>
-                      </div>
-                    )}
-                    {chat.patientData.insuranceCardProvided && (
-                      <div className="flex items-center gap-2 text-[10px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/10 p-1.5 rounded border border-emerald-500/20">
-                        <CheckCircle className="h-3.5 w-3.5 shrink-0" />
-                        <span>Carteirinha do Convênio recebida (Autorização Prévia)</span>
-                      </div>
-                    )}
                   </div>
                 </div>
               </div>
-            </div>
-          </>
-        )}
 
-        {chat.surveyResult && (
-          <>
-            <Separator />
-            <div>
-              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-                <Star className="h-3 w-3" /> Satisfação (CSAT)
-              </h4>
-              <div className="flex items-center gap-1 bg-muted/30 p-2 rounded-md border">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star
-                    key={star}
-                    className={cn(
-                      'h-4 w-4',
-                      star <= (chat.surveyResult || 0)
-                        ? 'text-yellow-400 fill-yellow-400'
-                        : 'text-muted-foreground/30',
-                    )}
-                  />
-                ))}
-                <span className="text-xs font-medium ml-2">{chat.surveyResult}/5 Estrelas</span>
+              <Separator />
+
+              <div>
+                <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2 tracking-wider">
+                  <FileText className="h-3 w-3" /> Documentos e OCR
+                </h4>
+
+                {documents.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center p-6 text-muted-foreground bg-muted/20 border border-dashed rounded-lg">
+                    <FileJson className="w-6 h-6 mb-2 opacity-50" />
+                    <p className="text-xs italic text-center">
+                      Nenhum documento anexado a esta conversa.
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {documents.map((doc) => {
+                      const isProcessed = doc.ocr_status === 'Processado'
+                      const isPending = doc.ocr_status === 'Pendente'
+                      const isFailed = doc.ocr_status === 'Falha'
+
+                      return (
+                        <div
+                          key={doc.id}
+                          className="border rounded-lg overflow-hidden flex flex-col shadow-sm"
+                        >
+                          <div
+                            className="p-3 bg-muted/10 flex items-start justify-between cursor-pointer hover:bg-muted/30 transition-colors"
+                            onClick={() => setExpandedDoc(expandedDoc === doc.id ? null : doc.id)}
+                          >
+                            <div className="flex flex-col gap-1">
+                              <span className="text-sm font-semibold">{doc.type}</span>
+                              <span className="text-[10px] text-muted-foreground">
+                                {new Date(doc.created).toLocaleDateString()} às{' '}
+                                {new Date(doc.created).toLocaleTimeString([], {
+                                  hour: '2-digit',
+                                  minute: '2-digit',
+                                })}
+                              </span>
+                            </div>
+                            <Badge
+                              variant="outline"
+                              className={cn(
+                                'text-[10px] px-2 py-0 h-5 shadow-none',
+                                isProcessed && 'border-green-200 text-green-700 bg-green-50',
+                                isPending && 'border-yellow-200 text-yellow-700 bg-yellow-50',
+                                isFailed && 'border-red-200 text-red-700 bg-red-50',
+                              )}
+                            >
+                              {doc.ocr_status}
+                            </Badge>
+                          </div>
+
+                          {expandedDoc === doc.id && (
+                            <div className="p-3 border-t bg-background flex flex-col gap-3 animate-in fade-in slide-in-from-top-2 duration-200">
+                              {doc.ocr_data ? (
+                                <div className="bg-slate-900 p-3 rounded-md text-[11px] font-mono overflow-x-auto text-emerald-400">
+                                  <pre>{JSON.stringify(doc.ocr_data, null, 2)}</pre>
+                                </div>
+                              ) : (
+                                <div className="bg-muted p-2 rounded-md text-xs text-muted-foreground text-center">
+                                  Sem dados OCR extraídos.
+                                </div>
+                              )}
+
+                              {doc.file && (
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full text-xs h-8 hover:bg-primary/5 hover:text-primary"
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    window.open(pb.files.getUrl(doc, doc.file), '_blank')
+                                  }}
+                                >
+                                  <Download className="w-3 h-3 mr-2" /> Baixar arquivo original
+                                </Button>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          </>
-        )}
-
-        {chat.lostReason && (
-          <>
-            <Separator />
-            <div>
-              <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-                <AlertCircle className="h-3 w-3 text-destructive" /> Motivo da Perda / Objeção
-              </h4>
-              <Badge
-                variant="outline"
-                className="text-destructive border-destructive/30 bg-destructive/5 capitalize"
-              >
-                {chat.lostReason.replace('_', ' ')}
-              </Badge>
-            </div>
-          </>
-        )}
-
-        <Separator />
-
-        <div>
-          <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-            <Activity className="h-3 w-3" /> Status de Engajamento
-          </h4>
-          <div className="bg-muted/50 rounded-lg p-3 text-sm border border-border/50">
-            <div className="flex justify-between items-center mb-2">
-              <span className="text-muted-foreground text-xs">Acompanhamento:</span>
-              <span className="font-medium text-xs">
-                {(chat.followUpStep ?? 0) > 0
-                  ? `Passo ${chat.followUpStep} de 12`
-                  : 'Ativo / Sem pendência'}
-              </span>
-            </div>
-            <Progress value={((chat.followUpStep ?? 0) / 12) * 100} className="h-1.5" />
-            <p className="text-[10px] text-muted-foreground mt-2 leading-tight">
-              O sistema envia até 12 mensagens automatizadas para reengajar pacientes inativos e
-              focar na conversão de exames.
-            </p>
-          </div>
-        </div>
-
-        <Separator />
-
-        <div>
-          <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-            <FileText className="h-3 w-3" /> Notas Internas
-          </h4>
-          <Textarea
-            defaultValue={chat.notes || ''}
-            placeholder="Adicione observações importantes sobre o paciente..."
-            className="min-h-[80px] text-sm resize-none"
-          />
-        </div>
-
-        <Separator />
-
-        <div>
-          <h4 className="text-xs font-semibold uppercase text-muted-foreground mb-3 flex items-center gap-2">
-            <Calendar className="h-3 w-3" /> Histórico Rápido
-          </h4>
-          {chat.history && chat.history.length > 0 ? (
-            <ul className="space-y-3 relative border-l-2 border-muted ml-2 pl-4">
-              {chat.history.map((item, idx) => (
-                <li key={idx} className="text-sm relative">
-                  <span className="absolute -left-[21px] top-1 h-2 w-2 rounded-full bg-primary"></span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="text-sm text-muted-foreground italic">Nenhum histórico encontrado.</p>
+            </>
           )}
         </div>
-      </div>
+      </ScrollArea>
     </div>
   )
 }

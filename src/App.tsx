@@ -6,11 +6,12 @@ import AppSidebar from '@/components/AppSidebar'
 import Header from '@/components/Header'
 import Index from '@/pages/Index'
 import Configuration from '@/pages/Configuration'
-import ChatArea from '@/pages/inbox/ChatArea'
+import Inbox from '@/pages/Inbox'
 import Patients from '@/pages/Patients'
 import PatientProfile from '@/pages/PatientProfile'
 import Exams from '@/pages/Exams'
 import NotFound from '@/pages/NotFound'
+import { AuthProvider } from '@/hooks/use-auth'
 
 function AppLayout() {
   return (
@@ -30,24 +31,26 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
-      <BrowserRouter>
-        <Routes>
-          {/* Landing / Login Route */}
-          <Route path="/" element={<Index />} />
+    <AuthProvider>
+      <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false}>
+        <BrowserRouter>
+          <Routes>
+            {/* Landing / Login Route */}
+            <Route path="/" element={<Index />} />
 
-          {/* Main App Routes with Sidebar & Header */}
-          <Route element={<AppLayout />}>
-            <Route path="/inbox" element={<ChatArea />} />
-            <Route path="/pacientes" element={<Patients />} />
-            <Route path="/pacientes/:id" element={<PatientProfile />} />
-            <Route path="/exames" element={<Exams />} />
-            <Route path="/configuracao" element={<Configuration />} />
-            <Route path="*" element={<NotFound />} />
-          </Route>
-        </Routes>
-      </BrowserRouter>
-      <Toaster />
-    </ThemeProvider>
+            {/* Main App Routes with Sidebar & Header */}
+            <Route element={<AppLayout />}>
+              <Route path="/inbox" element={<Inbox />} />
+              <Route path="/pacientes" element={<Patients />} />
+              <Route path="/pacientes/:id" element={<PatientProfile />} />
+              <Route path="/exames" element={<Exams />} />
+              <Route path="/configuracao" element={<Configuration />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+        <Toaster />
+      </ThemeProvider>
+    </AuthProvider>
   )
 }
