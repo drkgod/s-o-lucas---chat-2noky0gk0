@@ -68,21 +68,25 @@ export default function ChatList({ className }: { className?: string }) {
   })
 
   return (
-    <div className={cn('flex flex-col bg-card', className)}>
-      <div className="p-4 border-b space-y-3">
-        <h2 className="font-semibold">Mensagens</h2>
+    <div className={cn('flex flex-col bg-slate-50/50', className)}>
+      <div className="p-4 border-b border-slate-200 space-y-3 bg-white shrink-0">
+        <h2 className="text-[16px] font-bold text-slate-900">Conversas</h2>
         <div className="relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-3 top-3.5 h-4 w-4 text-slate-400" />
           <Input
             placeholder="Buscar paciente..."
-            className="pl-9 bg-muted/50"
+            className="pl-9 h-[44px] rounded-lg border-slate-200 focus-visible:ring-2 focus-visible:ring-blue-500 bg-white text-[14px]"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
+            aria-label="Buscar paciente"
           />
         </div>
-        <div className="flex flex-col gap-2 xl:flex-row">
+        <div className="flex flex-col gap-3 xl:flex-row">
           <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="h-8 text-xs flex-1">
+            <SelectTrigger
+              className="h-[44px] rounded-lg text-[14px] flex-1 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-blue-500"
+              aria-label="Filtrar por status"
+            >
               <SelectValue placeholder="Status" />
             </SelectTrigger>
             <SelectContent>
@@ -95,7 +99,10 @@ export default function ChatList({ className }: { className?: string }) {
           </Select>
           {canSeeTenants && (
             <Select value={tenantFilter} onValueChange={setTenantFilter}>
-              <SelectTrigger className="h-8 text-xs flex-1">
+              <SelectTrigger
+                className="h-[44px] rounded-lg text-[14px] flex-1 border-slate-200 bg-white focus-visible:ring-2 focus-visible:ring-blue-500"
+                aria-label="Filtrar por unidade"
+              >
                 <SelectValue placeholder="Unidade" />
               </SelectTrigger>
               <SelectContent>
@@ -111,31 +118,38 @@ export default function ChatList({ className }: { className?: string }) {
         </div>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="flex flex-col p-2 gap-1">
+      <ScrollArea className="flex-1 px-4 py-4">
+        <div className="flex flex-col gap-3">
           {loading ? (
             Array(5)
               .fill(0)
               .map((_, i) => (
-                <div key={i} className="flex gap-3 p-3">
-                  <Skeleton className="h-10 w-10 rounded-full shrink-0" />
-                  <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-full" />
-                    <Skeleton className="h-3 w-2/3" />
+                <div
+                  key={i}
+                  className="flex flex-col gap-3 p-4 bg-white rounded-lg border border-slate-100 shadow-sm animate-in fade-in"
+                >
+                  <div className="flex justify-between items-center w-full">
+                    <Skeleton className="h-5 w-1/2" />
+                    <Skeleton className="h-3 w-12" />
                   </div>
+                  <Skeleton className="h-4 w-3/4" />
                 </div>
               ))
           ) : error ? (
-            <div className="p-4 text-center">
-              <p className="text-sm text-destructive mb-2">{error}</p>
-              <Button size="sm" onClick={loadData}>
+            <div className="p-4 text-center bg-white rounded-lg border border-slate-200 shadow-sm">
+              <p className="text-[14px] text-red-600 mb-3 font-medium">{error}</p>
+              <Button
+                size="sm"
+                onClick={loadData}
+                className="h-[44px] rounded-lg px-6 hover:shadow-md transition-shadow font-medium"
+              >
                 Tentar novamente
               </Button>
             </div>
           ) : conversations.length === 0 ? (
-            <div className="flex flex-col items-center justify-center p-8 text-center text-muted-foreground h-full min-h-[200px]">
-              <MessageSquareOff className="h-8 w-8 mb-2 opacity-50" />
-              <p className="text-sm">
+            <div className="flex flex-col items-center justify-center p-8 text-center text-slate-500 h-full min-h-[200px] bg-white rounded-lg border border-slate-200 shadow-sm">
+              <MessageSquareOff className="h-8 w-8 mb-3 opacity-50" />
+              <p className="text-[14px] font-medium">
                 Nenhuma conversa.
                 <br />
                 Aguarde novos pacientes.
@@ -146,39 +160,42 @@ export default function ChatList({ className }: { className?: string }) {
               <button
                 key={chat.id}
                 onClick={() => setActiveChatId(chat.id)}
+                aria-current={chat.id === activeChatId}
                 className={cn(
-                  'flex flex-col items-start gap-2 p-3 rounded-lg text-left transition-all hover:bg-muted/50 border border-transparent',
-                  chat.id === activeChatId && 'bg-muted border-border shadow-sm',
+                  'flex flex-col items-start gap-3 p-4 rounded-lg text-left transition-all bg-white border outline-none focus-visible:ring-2 focus-visible:ring-blue-500',
+                  chat.id === activeChatId
+                    ? 'border-blue-500 shadow-md ring-1 ring-blue-500'
+                    : 'border-slate-200 hover:shadow-md hover:border-slate-300',
                 )}
               >
                 <div className="flex items-center justify-between w-full">
-                  <span className="font-medium truncate text-sm flex items-center gap-1.5">
+                  <span className="font-bold text-[16px] text-slate-900 truncate flex items-center gap-2">
                     {chat.status === 'triagem_ia' && (
-                      <Bot className="h-4 w-4 text-primary shrink-0" />
+                      <Bot className="h-4 w-4 text-blue-600 shrink-0" />
                     )}
                     <span className="truncate">{chat.patient_name || 'Paciente Desconhecido'}</span>
                   </span>
-                  <span className="text-[10px] text-muted-foreground shrink-0">
+                  <span className="text-[12px] font-medium text-slate-500 shrink-0">
                     {new Date(chat.updated).toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}
                   </span>
                 </div>
-                <div className="flex items-center justify-between w-full mt-1">
-                  <span className="text-xs text-muted-foreground truncate">
+                <div className="flex items-center justify-between w-full">
+                  <span className="text-[14px] text-slate-600 truncate font-medium">
                     {chat.patient_whatsapp}
                   </span>
                   <Badge
                     variant="outline"
                     className={cn(
-                      'text-[9px] px-1.5 h-4 capitalize shrink-0 ml-2 whitespace-nowrap',
+                      'text-[12px] px-2 py-0.5 h-6 font-bold capitalize shrink-0 ml-3 whitespace-nowrap border',
                       chat.status === 'aguardando_humano' &&
-                        'bg-amber-100 text-amber-800 border-amber-200',
+                        'bg-yellow-50 text-yellow-800 border-yellow-200',
                       chat.status === 'em_atendimento' &&
-                        'bg-green-100 text-green-800 border-green-200',
-                      chat.status === 'finalizada' && 'bg-gray-100 text-gray-800 border-gray-200',
-                      chat.status === 'triagem_ia' && 'bg-blue-100 text-blue-800 border-blue-200',
+                        'bg-green-50 text-green-800 border-green-200',
+                      chat.status === 'finalizada' && 'bg-slate-50 text-slate-800 border-slate-200',
+                      chat.status === 'triagem_ia' && 'bg-blue-50 text-blue-800 border-blue-200',
                     )}
                   >
                     {chat.status.replace('_', ' ')}
